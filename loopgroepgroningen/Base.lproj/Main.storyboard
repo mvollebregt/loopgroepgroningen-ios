@@ -14,30 +14,45 @@
         <scene sceneID="bjz-uh-DQY">
             <objects>
                 <tableViewController id="s21-Ue-Tzy" customClass="PrikbordController" customModule="loopgroepgroningen" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="325" sectionHeaderHeight="28" sectionFooterHeight="28" id="BRt-oE-h1J">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="165" sectionHeaderHeight="28" sectionFooterHeight="28" id="BRt-oE-h1J">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BerichtTableViewCell" rowHeight="325" id="3jM-J8-VLM" customClass="BerichtCell" customModule="loopgroepgroningen" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="325"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BerichtTableViewCell" rowHeight="165" id="3jM-J8-VLM" customClass="BerichtCell" customModule="loopgroepgroningen" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="165"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3jM-J8-VLM" id="5IH-F0-RjX">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="325"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="164.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" text="Label" textAlignment="natural" lineBreakMode="headTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aar-1G-WPA">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="325"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Rk-ez-iPW">
+                                            <rect key="frame" x="269" y="10" width="86" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KC1-EP-TRS">
+                                            <rect key="frame" x="20" y="10" width="207" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" misplaced="YES" textAlignment="natural" lineBreakMode="headTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aar-1G-WPA">
+                                            <rect key="frame" x="20" y="37" width="335" height="110"/>
+                                            <string key="text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottomMargin" secondItem="aar-1G-WPA" secondAttribute="bottom" constant="-8" id="LGH-k7-ah5"/>
-                                        <constraint firstItem="aar-1G-WPA" firstAttribute="top" secondItem="5IH-F0-RjX" secondAttribute="topMargin" constant="-8" id="Og9-77-N8I"/>
-                                        <constraint firstItem="aar-1G-WPA" firstAttribute="leading" secondItem="5IH-F0-RjX" secondAttribute="leadingMargin" constant="-8" id="ezn-wa-D3D"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="aar-1G-WPA" secondAttribute="trailing" constant="-8" id="mEG-XC-7XO"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="aar-1G-WPA" secondAttribute="bottom" constant="20" id="LGH-k7-ah5"/>
+                                        <constraint firstItem="aar-1G-WPA" firstAttribute="top" secondItem="5IH-F0-RjX" secondAttribute="topMargin" constant="29" id="Tls-PK-UcN"/>
+                                        <constraint firstItem="aar-1G-WPA" firstAttribute="leading" secondItem="5IH-F0-RjX" secondAttribute="leadingMargin" constant="20" id="ezn-wa-D3D"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="aar-1G-WPA" secondAttribute="trailing" constant="20" id="mEG-XC-7XO"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
