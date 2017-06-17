@@ -16,6 +16,7 @@
 		D00484DC1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484DB1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift */; };
 		D00484EA1EEDB8F40082D317 /* PrikbordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484E91EEDB8F40082D317 /* PrikbordController.swift */; };
 		D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */; };
+		D04C6ECA1EF56C8E009051B3 /* Bericht.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04C6EC91EF56C8E009051B3 /* Bericht.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		D00484DD1EEDB7AD0082D317 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D00484E91EEDB8F40082D317 /* PrikbordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordController.swift; sourceTree = "<group>"; };
 		D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BerichtCell.swift; sourceTree = "<group>"; };
+		D04C6EC91EF56C8E009051B3 /* Bericht.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bericht.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,14 +103,13 @@
 		D00484B71EEDB7AD0082D317 /* loopgroepgroningen */ = {
 			isa = PBXGroup;
 			children = (
-				D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */,
-				D00484B81EEDB7AD0082D317 /* AppDelegate.swift */,
 				D00484BC1EEDB7AD0082D317 /* Main.storyboard */,
+				D04C6EC81EF55BF6009051B3 /* prikbord */,
+				D00484B81EEDB7AD0082D317 /* AppDelegate.swift */,
 				D00484C21EEDB7AD0082D317 /* Assets.xcassets */,
 				D00484C41EEDB7AD0082D317 /* LaunchScreen.storyboard */,
 				D00484C71EEDB7AD0082D317 /* Info.plist */,
 				D00484BF1EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld */,
-				D00484E91EEDB8F40082D317 /* PrikbordController.swift */,
 			);
 			path = loopgroepgroningen;
 			sourceTree = "<group>";
@@ -129,6 +130,16 @@
 				D00484DD1EEDB7AD0082D317 /* Info.plist */,
 			);
 			path = loopgroepgroningenUITests;
+			sourceTree = "<group>";
+		};
+		D04C6EC81EF55BF6009051B3 /* prikbord */ = {
+			isa = PBXGroup;
+			children = (
+				D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */,
+				D00484E91EEDB8F40082D317 /* PrikbordController.swift */,
+				D04C6EC91EF56C8E009051B3 /* Bericht.swift */,
+			);
+			name = prikbord;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D00484C11EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld in Sources */,
+				D04C6ECA1EF56C8E009051B3 /* Bericht.swift in Sources */,
 				D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */,
 				D00484B91EEDB7AD0082D317 /* AppDelegate.swift in Sources */,
 				D00484EA1EEDB8F40082D317 /* PrikbordController.swift in Sources */,

@@ -14,8 +14,28 @@ class BerichtCell: UITableViewCell {
     
     @IBOutlet weak var auteurLabel: UILabel!
     @IBOutlet weak var tijdstipLabel: UILabel!
-    @IBOutlet weak var berichtTextView: UITextView!
+    @IBOutlet weak var berichtLabel: UILabel!
+    
+    private var dateFormatter = DateFormatter()
+    private var _bericht : Bericht?
 
+    var bericht : Bericht? {
+        get {
+            return _bericht
+        }
+        set(newBericht) {
+            _bericht = newBericht;
+            auteurLabel.text = _bericht!.auteur
+            tijdstipLabel.text = dateFormatter.string(from: _bericht!.tijdstip!)
+            berichtLabel.text = _bericht!.bericht
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        dateFormatter.dateFormat = "dd-MM hh:mm"
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
