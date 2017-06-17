@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		D00484B91EEDB7AD0082D317 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484B81EEDB7AD0082D317 /* AppDelegate.swift */; };
-		D00484BB1EEDB7AD0082D317 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484BA1EEDB7AD0082D317 /* ViewController.swift */; };
 		D00484BE1EEDB7AD0082D317 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D00484BC1EEDB7AD0082D317 /* Main.storyboard */; };
 		D00484C11EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D00484BF1EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld */; };
 		D00484C31EEDB7AD0082D317 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D00484C21EEDB7AD0082D317 /* Assets.xcassets */; };
 		D00484C61EEDB7AD0082D317 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D00484C41EEDB7AD0082D317 /* LaunchScreen.storyboard */; };
 		D00484D11EEDB7AD0082D317 /* loopgroepgroningenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484D01EEDB7AD0082D317 /* loopgroepgroningenTests.swift */; };
 		D00484DC1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484DB1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift */; };
+		D00484EA1EEDB8F40082D317 /* PrikbordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484E91EEDB8F40082D317 /* PrikbordController.swift */; };
+		D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +38,6 @@
 /* Begin PBXFileReference section */
 		D00484B51EEDB7AD0082D317 /* loopgroepgroningen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = loopgroepgroningen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00484B81EEDB7AD0082D317 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D00484BA1EEDB7AD0082D317 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D00484BD1EEDB7AD0082D317 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D00484C01EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = loopgroepgroningen.xcdatamodel; sourceTree = "<group>"; };
 		D00484C21EEDB7AD0082D317 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,6 +49,8 @@
 		D00484D71EEDB7AD0082D317 /* loopgroepgroningenUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = loopgroepgroningenUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00484DB1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loopgroepgroningenUITests.swift; sourceTree = "<group>"; };
 		D00484DD1EEDB7AD0082D317 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D00484E91EEDB8F40082D317 /* PrikbordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordController.swift; sourceTree = "<group>"; };
+		D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BerichtCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,13 +101,14 @@
 		D00484B71EEDB7AD0082D317 /* loopgroepgroningen */ = {
 			isa = PBXGroup;
 			children = (
+				D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */,
 				D00484B81EEDB7AD0082D317 /* AppDelegate.swift */,
-				D00484BA1EEDB7AD0082D317 /* ViewController.swift */,
 				D00484BC1EEDB7AD0082D317 /* Main.storyboard */,
 				D00484C21EEDB7AD0082D317 /* Assets.xcassets */,
 				D00484C41EEDB7AD0082D317 /* LaunchScreen.storyboard */,
 				D00484C71EEDB7AD0082D317 /* Info.plist */,
 				D00484BF1EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld */,
+				D00484E91EEDB8F40082D317 /* PrikbordController.swift */,
 			);
 			path = loopgroepgroningen;
 			sourceTree = "<group>";
@@ -262,9 +265,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D00484BB1EEDB7AD0082D317 /* ViewController.swift in Sources */,
 				D00484C11EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld in Sources */,
+				D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */,
 				D00484B91EEDB7AD0082D317 /* AppDelegate.swift in Sources */,
+				D00484EA1EEDB8F40082D317 /* PrikbordController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,6 +515,7 @@
 				D00484E21EEDB7AD0082D317 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D00484E31EEDB7AD0082D317 /* Build configuration list for PBXNativeTarget "loopgroepgroningenTests" */ = {
 			isa = XCConfigurationList;
@@ -519,6 +524,7 @@
 				D00484E51EEDB7AD0082D317 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D00484E61EEDB7AD0082D317 /* Build configuration list for PBXNativeTarget "loopgroepgroningenUITests" */ = {
 			isa = XCConfigurationList;
@@ -527,6 +533,7 @@
 				D00484E81EEDB7AD0082D317 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
