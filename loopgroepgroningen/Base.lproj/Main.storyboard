@@ -14,7 +14,7 @@
         <scene sceneID="bjz-uh-DQY">
             <objects>
                 <tableViewController id="s21-Ue-Tzy" customClass="PrikbordController" customModule="loopgroepgroningen" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="165" sectionHeaderHeight="28" sectionFooterHeight="28" id="BRt-oE-h1J">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="165" sectionHeaderHeight="28" sectionFooterHeight="28" id="BRt-oE-h1J">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="165"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3jM-J8-VLM" id="5IH-F0-RjX">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="164.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="165"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Rk-ez-iPW">
@@ -48,11 +48,12 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <color key="backgroundColor" red="0.47879394990000002" green="0.99751319370000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="bottomMargin" secondItem="aar-1G-WPA" secondAttribute="bottom" constant="20" id="LGH-k7-ah5"/>
                                         <constraint firstItem="aar-1G-WPA" firstAttribute="top" secondItem="5IH-F0-RjX" secondAttribute="topMargin" constant="29" id="Tls-PK-UcN"/>
-                                        <constraint firstItem="aar-1G-WPA" firstAttribute="leading" secondItem="5IH-F0-RjX" secondAttribute="leadingMargin" constant="20" id="ezn-wa-D3D"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="aar-1G-WPA" secondAttribute="trailing" constant="20" id="mEG-XC-7XO"/>
+                                        <constraint firstItem="aar-1G-WPA" firstAttribute="leading" secondItem="5IH-F0-RjX" secondAttribute="leadingMargin" constant="12" id="ezn-wa-D3D"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="aar-1G-WPA" secondAttribute="trailing" constant="12" id="mEG-XC-7XO"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
