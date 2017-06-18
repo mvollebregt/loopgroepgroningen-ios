@@ -12,6 +12,7 @@ class BerichtCell: UITableViewCell {
     
     // MARK: properties
     
+    @IBOutlet weak var prikselView: UIView!
     @IBOutlet weak var auteurLabel: UILabel!
     @IBOutlet weak var tijdstipLabel: UILabel!
     @IBOutlet weak var berichtLabel: UILabel!
@@ -31,14 +32,12 @@ class BerichtCell: UITableViewCell {
         }
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        dateFormatter.dateFormat = "dd-MM hh:mm"
-    }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        dateFormatter.dateFormat = "dd-MM hh:mm"
+        prikselView.layer.cornerRadius = 6.0
+        prikselView.layer.masksToBounds = true
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
