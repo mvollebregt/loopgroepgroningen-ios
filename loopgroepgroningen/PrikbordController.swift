@@ -4,6 +4,8 @@
 //
 //  Created by Michel Vollebregt on 11-06-17.
 //  Copyright © 2017 Michel Vollebregt. All rights reserved.
+
+
 //
 
 import UIKit
@@ -19,9 +21,11 @@ class PrikbordController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 230 // TODO
         
+        PrikbordService.getBerichten()
+    
     }
 
     override func didReceiveMemoryWarning() {
@@ -47,7 +51,7 @@ class PrikbordController: UITableViewController {
 
         let bericht = Bericht()
         bericht.auteur = "Jantina Loperina"
-        bericht.tijdstip = Date(timeIntervalSinceNow: -300)
+        bericht.tijdstip = "vandaag"
         if (indexPath.row != 0) {
             bericht.bericht = "Lorem ipsum"
         } else {

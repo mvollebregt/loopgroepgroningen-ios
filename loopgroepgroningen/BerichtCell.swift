@@ -27,7 +27,7 @@ class BerichtCell: UITableViewCell {
         set(newBericht) {
             _bericht = newBericht;
             auteurLabel.text = _bericht!.auteur
-            tijdstipLabel.text = dateFormatter.string(from: _bericht!.tijdstip!)
+            tijdstipLabel.text = _bericht!.tijdstip! //dateFormatter.string(from: _bericht!.tijdstip!)
             berichtLabel.text = _bericht!.bericht
         }
     }

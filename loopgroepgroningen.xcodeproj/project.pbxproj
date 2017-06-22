@@ -15,6 +15,11 @@
 		D00484D11EEDB7AD0082D317 /* loopgroepgroningenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484D01EEDB7AD0082D317 /* loopgroepgroningenTests.swift */; };
 		D00484DC1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484DB1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift */; };
 		D00484EA1EEDB8F40082D317 /* PrikbordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484E91EEDB8F40082D317 /* PrikbordController.swift */; };
+		D00AD5251EFC2D8600E36C74 /* PrikbordService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00AD5241EFC2D8600E36C74 /* PrikbordService.swift */; };
+		D033E9461EFAE870006F0C65 /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = D033E9411EFAE870006F0C65 /* TFHpple.m */; };
+		D033E9471EFAE870006F0C65 /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = D033E9431EFAE870006F0C65 /* TFHppleElement.m */; };
+		D033E9481EFAE870006F0C65 /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D033E9451EFAE870006F0C65 /* XPathQuery.m */; };
+		D033E94B1EFAE90C006F0C65 /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D033E94A1EFAE90C006F0C65 /* libxml2.2.tbd */; };
 		D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */; };
 		D04C6ECA1EF56C8E009051B3 /* Bericht.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04C6EC91EF56C8E009051B3 /* Bericht.swift */; };
 /* End PBXBuildFile section */
@@ -51,6 +56,15 @@
 		D00484DB1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loopgroepgroningenUITests.swift; sourceTree = "<group>"; };
 		D00484DD1EEDB7AD0082D317 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D00484E91EEDB8F40082D317 /* PrikbordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordController.swift; sourceTree = "<group>"; };
+		D00AD5241EFC2D8600E36C74 /* PrikbordService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordService.swift; sourceTree = "<group>"; };
+		D033E93F1EFAE86F006F0C65 /* loopgroepgroningen-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "loopgroepgroningen-Bridging-Header.h"; sourceTree = "<group>"; };
+		D033E9401EFAE870006F0C65 /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
+		D033E9411EFAE870006F0C65 /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
+		D033E9421EFAE870006F0C65 /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
+		D033E9431EFAE870006F0C65 /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHppleElement.m; sourceTree = "<group>"; };
+		D033E9441EFAE870006F0C65 /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
+		D033E9451EFAE870006F0C65 /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
+		D033E94A1EFAE90C006F0C65 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BerichtCell.swift; sourceTree = "<group>"; };
 		D04C6EC91EF56C8E009051B3 /* Bericht.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bericht.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -60,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D033E94B1EFAE90C006F0C65 /* libxml2.2.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +102,7 @@
 				D00484CF1EEDB7AD0082D317 /* loopgroepgroningenTests */,
 				D00484DA1EEDB7AD0082D317 /* loopgroepgroningenUITests */,
 				D00484B61EEDB7AD0082D317 /* Products */,
+				D033E9491EFAE90C006F0C65 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,6 +119,7 @@
 		D00484B71EEDB7AD0082D317 /* loopgroepgroningen */ = {
 			isa = PBXGroup;
 			children = (
+				D033E93C1EFAE7FF006F0C65 /* hpple */,
 				D00484BC1EEDB7AD0082D317 /* Main.storyboard */,
 				D04C6EC81EF55BF6009051B3 /* prikbord */,
 				D00484B81EEDB7AD0082D317 /* AppDelegate.swift */,
@@ -132,12 +149,35 @@
 			path = loopgroepgroningenUITests;
 			sourceTree = "<group>";
 		};
+		D033E93C1EFAE7FF006F0C65 /* hpple */ = {
+			isa = PBXGroup;
+			children = (
+				D033E9401EFAE870006F0C65 /* TFHpple.h */,
+				D033E9411EFAE870006F0C65 /* TFHpple.m */,
+				D033E9421EFAE870006F0C65 /* TFHppleElement.h */,
+				D033E9431EFAE870006F0C65 /* TFHppleElement.m */,
+				D033E9441EFAE870006F0C65 /* XPathQuery.h */,
+				D033E9451EFAE870006F0C65 /* XPathQuery.m */,
+				D033E93F1EFAE86F006F0C65 /* loopgroepgroningen-Bridging-Header.h */,
+			);
+			name = hpple;
+			sourceTree = "<group>";
+		};
+		D033E9491EFAE90C006F0C65 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D033E94A1EFAE90C006F0C65 /* libxml2.2.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D04C6EC81EF55BF6009051B3 /* prikbord */ = {
 			isa = PBXGroup;
 			children = (
 				D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */,
 				D00484E91EEDB8F40082D317 /* PrikbordController.swift */,
 				D04C6EC91EF56C8E009051B3 /* Bericht.swift */,
+				D00AD5241EFC2D8600E36C74 /* PrikbordService.swift */,
 			);
 			name = prikbord;
 			sourceTree = "<group>";
@@ -210,6 +250,7 @@
 				TargetAttributes = {
 					D00484B41EEDB7AD0082D317 = {
 						CreatedOnToolsVersion = 8.3.3;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					D00484CB1EEDB7AD0082D317 = {
@@ -276,7 +317,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D00AD5251EFC2D8600E36C74 /* PrikbordService.swift in Sources */,
 				D00484C11EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld in Sources */,
+				D033E9471EFAE870006F0C65 /* TFHppleElement.m in Sources */,
+				D033E9481EFAE870006F0C65 /* XPathQuery.m in Sources */,
+				D033E9461EFAE870006F0C65 /* TFHpple.m in Sources */,
 				D04C6ECA1EF56C8E009051B3 /* Bericht.swift in Sources */,
 				D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */,
 				D00484B91EEDB7AD0082D317 /* AppDelegate.swift in Sources */,
@@ -434,10 +479,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = loopgroepgroningen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.mvollebregt.loopgroepgroningen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "loopgroepgroningen/loopgroepgroningen-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -446,10 +495,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = loopgroepgroningen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.mvollebregt.loopgroepgroningen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "loopgroepgroningen/loopgroepgroningen-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

@@ -12,6 +12,17 @@ class Bericht {
     
     var bericht : String?
     var auteur : String?
-    var tijdstip : Date?
+    var tijdstip : String?
+    
+    public var description: String {
+        var description = "{auteur:"
+        description.append(auteur ?? "")
+        description.append(", tijdstip: ")
+        description.append(tijdstip ?? "")
+        description.append(", bericht: ")
+        description.append(bericht ?? "")
+        description.append(")")
+        return description;
+    }
     
 }
