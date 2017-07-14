@@ -9,8 +9,27 @@
 //
 
 import UIKit
+import CoreData
 
-class PrikbordController: UITableViewController {
+class PrikbordController: UITableViewController, NSFetchedResultsControllerDelegate {
+    
+    var fetchedResultsController: NSFetchedResultsController<BerichtMO>!
+    
+    func initializeFetchedResultsController() {
+        let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
+        let tijdstipSort = NSSortDescriptor(key: "volgnummer", ascending: true)
+        request.sortDescriptors = [tijdstipSort]
+        
+        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("Failed to initialize FetchedResultsController: \(error)")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,8 +43,9 @@ class PrikbordController: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 230 // TODO
         
-        PrikbordService.getBerichten()
-    
+        initializeFetchedResultsController()
+        PrikbordService.syncBerichten()
+        // TODO: data updaten zodra berichten gesynct. Nu verschijnen nieuwe berichten pas na opnieuw opstarten van app.
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,31 +54,27 @@ class PrikbordController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 4
-    }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellIdentifier = "BerichtTableViewCell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! BerichtCell
-
-        let bericht = Bericht()
-        bericht.auteur = "Jantina Loperina"
-        bericht.tijdstip = "vandaag"
-        if (indexPath.row != 0) {
-            bericht.bericht = "Lorem ipsum"
-        } else {
-            bericht.bericht = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BerichtTableViewCell", for: indexPath) as! BerichtCell
+        // Set up the cell
+        guard let bericht = self.fetchedResultsController?.object(at: indexPath) else {
+            fatalError("Attempt to configure cell without a managed object")
         }
-        cell.bericht = bericht;
+        cell.bericht = bericht
         return cell
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return fetchedResultsController.sections!.count
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let sections = fetchedResultsController.sections else {
+            fatalError("No sections in fetchedResultsController")
+        }
+        let sectionInfo = sections[section]
+        return sectionInfo.numberOfObjects
     }
     
 //    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

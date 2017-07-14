@@ -18,9 +18,9 @@ class BerichtCell: UITableViewCell {
     @IBOutlet weak var berichtLabel: UILabel!
     
     private var dateFormatter = DateFormatter()
-    private var _bericht : Bericht?
+    private var _bericht : BerichtMO?
 
-    var bericht : Bericht? {
+    var bericht : BerichtMO? {
         get {
             return _bericht
         }
@@ -28,7 +28,7 @@ class BerichtCell: UITableViewCell {
             _bericht = newBericht;
             auteurLabel.text = _bericht!.auteur
             tijdstipLabel.text = _bericht!.tijdstip! //dateFormatter.string(from: _bericht!.tijdstip!)
-            berichtLabel.text = _bericht!.bericht
+            berichtLabel.text = _bericht!.berichttekst
         }
     }
 

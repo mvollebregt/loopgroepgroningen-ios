@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "A1FB4B964C76B6E6732D4C881FDA0E2AF1603EB3",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "A1FB4B964C76B6E6732D4C881FDA0E2AF1603EB3" : 9223372036854775807,
+    "C98F34640CDAF8C591AEB91EEF768A6198C4416E" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "9AFA27CD-9158-491C-AF84-3E7D9A0EEBAE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "A1FB4B964C76B6E6732D4C881FDA0E2AF1603EB3" : "loopgroepgroningen\/",
+    "C98F34640CDAF8C591AEB91EEF768A6198C4416E" : "hpple\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "loopgroepgroningen",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "loopgroepgroningen.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:mvollebregt\/loopgroepgroningen.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A1FB4B964C76B6E6732D4C881FDA0E2AF1603EB3"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/topfunky\/hpple",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C98F34640CDAF8C591AEB91EEF768A6198C4416E"
+    }
+  ]
+}
