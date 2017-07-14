@@ -30,6 +30,25 @@ class PrikbordController: UITableViewController, NSFetchedResultsControllerDeleg
             fatalError("Failed to initialize FetchedResultsController: \(error)")
         }
     }
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        self.tableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch (type) {
+        case .insert:
+            print(newIndexPath!.indices)
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+            break;
+        default:
+            print("...")
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        self.tableView.endUpdates()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +80,7 @@ class PrikbordController: UITableViewController, NSFetchedResultsControllerDeleg
         guard let bericht = self.fetchedResultsController?.object(at: indexPath) else {
             fatalError("Attempt to configure cell without a managed object")
         }
+        print("rij, volgnummer", indexPath.row, bericht.volgnummer)
         cell.bericht = bericht
         return cell
     }

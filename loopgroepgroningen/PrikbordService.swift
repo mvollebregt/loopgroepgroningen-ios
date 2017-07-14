@@ -50,13 +50,14 @@ class PrikbordService {
                 print("nieuwe berichten", berichten.count)
                 
                 // opslaan van alle nieuwe berichten
-                var volgnummer = nieuwsteBericht.first?.volgnummer ?? 0
+                var volgnummer = nieuwsteBericht.first?.volgnummer ?? -1
                 for bericht in berichten.reversed() {
+                    volgnummer += 1
                     bericht.volgnummer = volgnummer
 //                    managedObjectContext.insert(bericht)
-                    volgnummer += 1
                 }
                 do {
+                    print("saving context")
                     try managedObjectContext.save()
                 } catch {
                     fatalError("Kon managed object context niet opslaan")
