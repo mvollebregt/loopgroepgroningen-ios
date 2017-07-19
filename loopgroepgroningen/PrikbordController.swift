@@ -38,11 +38,10 @@ class PrikbordController: UITableViewController, NSFetchedResultsControllerDeleg
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch (type) {
         case .insert:
-            print(newIndexPath!.indices)
             tableView.insertRows(at: [newIndexPath!], with: .fade)
             break;
         default:
-            print("...")
+            print("did receive fetch with type ", type)
         }
     }
     
@@ -63,8 +62,9 @@ class PrikbordController: UITableViewController, NSFetchedResultsControllerDeleg
         tableView.estimatedRowHeight = 230 // TODO
         
         initializeFetchedResultsController()
-        PrikbordService.syncBerichten()
-        // TODO: data updaten zodra berichten gesynct. Nu verschijnen nieuwe berichten pas na opnieuw opstarten van app.
+        print("view did load")
+        // TODO: hier ook syncen?
+//        PrikbordService.syncBerichten(completionHandler: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,7 +80,6 @@ class PrikbordController: UITableViewController, NSFetchedResultsControllerDeleg
         guard let bericht = self.fetchedResultsController?.object(at: indexPath) else {
             fatalError("Attempt to configure cell without a managed object")
         }
-        print("rij, volgnummer", indexPath.row, bericht.volgnummer)
         cell.bericht = bericht
         return cell
     }
