@@ -64,7 +64,7 @@ class PrikbordController: UITableViewController, NSFetchedResultsControllerDeleg
         initializeFetchedResultsController()
         print("view did load")
         // TODO: hier ook syncen?
-//        PrikbordService.syncBerichten(completionHandler: nil)
+        PrikbordService.syncBerichten(completionHandler: nil)
     }
 
     override func didReceiveMemoryWarning() {

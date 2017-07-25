@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>loopgroepgroningen backgroundtask.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>loopgroepgroningen.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
