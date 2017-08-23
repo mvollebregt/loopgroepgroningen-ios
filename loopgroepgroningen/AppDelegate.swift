@@ -49,14 +49,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.applicationIconBadgeNumber = 0
         UserDefaults.standard.set(0, forKey: "badgeCount")
         
-        // check of gebruiker ingelogd, zo niet, dan loginvenster tonen
-        let rootViewController = application.keyWindow?.rootViewController
-        if (!(rootViewController?.presentedViewController is LoginViewController)) {
-            let loginViewController = UIStoryboard(name: "Main", bundle: nil)
-                .instantiateViewController(withIdentifier: "LoginViewController")
-            rootViewController?.present(
-                loginViewController, animated: true, completion: nil);
-        }
+        // check of gebruiker ingelogd, zo niet, dan loginvenster tonen: even uitgezet voor nu omdat het toch nog niks doet
+//        let rootViewController = application.keyWindow?.rootViewController
+//        if (!(rootViewController?.presentedViewController is LoginViewController)) {
+//            let loginViewController = UIStoryboard(name: "Main", bundle: nil)
+//                .instantiateViewController(withIdentifier: "LoginViewController")
+//            rootViewController?.present(
+//                loginViewController, animated: true, completion: nil);
+//        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
