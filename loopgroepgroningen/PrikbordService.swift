@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 class PrikbordService {
     
@@ -69,13 +70,37 @@ class PrikbordService {
                         print("kon managed object context niet opslaan")
                         completionHandler?(UIBackgroundFetchResult.failed)
                     }
-                    print("call completion handler")
+                    
+                    notify(berichten: berichten);
+
                     completionHandler?(berichten.count == 0 ? UIBackgroundFetchResult.noData : UIBackgroundFetchResult.newData)
                 }
                 task.resume()
             }
             catch {
                 fatalError("Synchronisatie mislukt")
+            }
+        }
+    }
+    
+    
+    private static func notify(berichten: [BerichtMO]) {
+        let userDefaults = UserDefaults.standard
+        let badgeCount = userDefaults.integer(forKey: "badgeCount") + berichten.count;
+        userDefaults.set(badgeCount, forKey: "badgeCount")
+        
+        for bericht in berichten {
+            let content = UNMutableNotificationContent()
+            content.title = bericht.auteur!
+            content.body = bericht.berichttekst!
+            content.badge = NSNumber(value: badgeCount)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            let request = UNNotificationRequest(identifier: String(format:"Loopgroep %d", bericht.volgnummer), content: content, trigger: trigger)
+            let center = UNUserNotificationCenter.current()
+            center.add(request) { (error : Error?) in
+                if let theError = error {
+                    print(theError.localizedDescription)
+                }
             }
         }
     }

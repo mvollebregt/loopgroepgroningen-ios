@@ -68,26 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("background fetch started!")
         PrikbordService.syncBerichten(completionHandler: completionHandler)
-        notify()
-    }
-    
-    private func notify() {
-        let userDefaults = UserDefaults.standard
-        let badgeCount = userDefaults.integer(forKey: "badgeCount") + 1
-        userDefaults.set(badgeCount, forKey: "badgeCount")
-//
-        let content = UNMutableNotificationContent()
-        content.title = "Loopgroep"
-        content.body = "Ik heb een bericht voor je"
-        content.badge = badgeCount as NSNumber
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let request = UNNotificationRequest(identifier: String(format:"Loopgroep %d", badgeCount), content: content, trigger: trigger)
-        let center = UNUserNotificationCenter.current()
-        center.add(request) { (error : Error?) in
-            if let theError = error {
-                print(theError.localizedDescription)
-            }
-        }
     }
 
     // MARK: - Core Data stack
