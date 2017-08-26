@@ -18,6 +18,8 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     var fetchedResultsController: NSFetchedResultsController<BerichtMO>!
     var viewAdjustedForKeyboard = false;
+    var storedKeyboardHeight = CGFloat(0);
+    var storedContentOffset = CGPoint.zero;
     
     func initializeFetchedResultsController() {
         let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
@@ -72,8 +74,6 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 8
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -86,6 +86,17 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         print("view did load")
         // TODO: hier ook syncen?
         PrikbordService.syncBerichten(completionHandler: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground(notification:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object:nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive(notification:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object:nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -123,14 +134,15 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(notification: NSNotification)  {
         if (!viewAdjustedForKeyboard) {
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                self.view.frame.size.height -= keyboardSize.height
+            if let keyboardHeight = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.height {
+                self.view.frame.size.height -= keyboardHeight
                 var newContentOffset = self.tableView.contentOffset
-                newContentOffset.y = newContentOffset.y + keyboardSize.height
+                newContentOffset.y = newContentOffset.y + keyboardHeight
                 self.tableView.setContentOffset(newContentOffset, animated: false)
                 viewAdjustedForKeyboard = true;
+                storedKeyboardHeight = keyboardHeight;
             }
         }
     }
@@ -153,6 +165,19 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
                 self.view.frame.size.height += keyboardSize.height
                 viewAdjustedForKeyboard = false;
             }
+        }
+    }
+    
+    func appWillEnterForeground(notification: NSNotification) {
+        if (viewAdjustedForKeyboard) {
+            storedContentOffset = self.tableView.contentOffset;
+        }
+    }
+    
+    func appDidBecomeActive(notification: NSNotification) {
+        if (viewAdjustedForKeyboard) {
+            self.tableView.contentOffset = storedContentOffset
+            self.view.frame.size.height -= storedKeyboardHeight
         }
     }
     
