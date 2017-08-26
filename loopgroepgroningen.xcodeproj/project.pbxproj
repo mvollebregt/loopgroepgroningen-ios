@@ -14,13 +14,13 @@
 		D00484C61EEDB7AD0082D317 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D00484C41EEDB7AD0082D317 /* LaunchScreen.storyboard */; };
 		D00484D11EEDB7AD0082D317 /* loopgroepgroningenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484D01EEDB7AD0082D317 /* loopgroepgroningenTests.swift */; };
 		D00484DC1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484DB1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift */; };
-		D00484EA1EEDB8F40082D317 /* PrikbordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00484E91EEDB8F40082D317 /* PrikbordController.swift */; };
 		D00AD5251EFC2D8600E36C74 /* PrikbordService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00AD5241EFC2D8600E36C74 /* PrikbordService.swift */; };
 		D033E9461EFAE870006F0C65 /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = D033E9411EFAE870006F0C65 /* TFHpple.m */; };
 		D033E9471EFAE870006F0C65 /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = D033E9431EFAE870006F0C65 /* TFHppleElement.m */; };
 		D033E9481EFAE870006F0C65 /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D033E9451EFAE870006F0C65 /* XPathQuery.m */; };
 		D033E94B1EFAE90C006F0C65 /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D033E94A1EFAE90C006F0C65 /* libxml2.2.tbd */; };
 		D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */; };
+		D0ABBAAF1F4DB6E400FF4C48 /* PrikbordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */; };
 		D0C971F71F27CF410046D1CB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C971F61F27CF410046D1CB /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,7 +55,6 @@
 		D00484D71EEDB7AD0082D317 /* loopgroepgroningenUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = loopgroepgroningenUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00484DB1EEDB7AD0082D317 /* loopgroepgroningenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loopgroepgroningenUITests.swift; sourceTree = "<group>"; };
 		D00484DD1EEDB7AD0082D317 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D00484E91EEDB8F40082D317 /* PrikbordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordController.swift; sourceTree = "<group>"; };
 		D00AD5241EFC2D8600E36C74 /* PrikbordService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordService.swift; sourceTree = "<group>"; };
 		D033E93F1EFAE86F006F0C65 /* loopgroepgroningen-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "loopgroepgroningen-Bridging-Header.h"; sourceTree = "<group>"; };
 		D033E9401EFAE870006F0C65 /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
@@ -66,6 +65,7 @@
 		D033E9451EFAE870006F0C65 /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
 		D033E94A1EFAE90C006F0C65 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BerichtCell.swift; sourceTree = "<group>"; };
+		D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordController.swift; sourceTree = "<group>"; };
 		D0C971F61F27CF410046D1CB /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -176,7 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */,
-				D00484E91EEDB8F40082D317 /* PrikbordController.swift */,
+				D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */,
 				D00AD5241EFC2D8600E36C74 /* PrikbordService.swift */,
 			);
 			name = prikbord;
@@ -336,10 +336,10 @@
 				D00484C11EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld in Sources */,
 				D033E9471EFAE870006F0C65 /* TFHppleElement.m in Sources */,
 				D033E9481EFAE870006F0C65 /* XPathQuery.m in Sources */,
+				D0ABBAAF1F4DB6E400FF4C48 /* PrikbordController.swift in Sources */,
 				D033E9461EFAE870006F0C65 /* TFHpple.m in Sources */,
 				D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */,
 				D00484B91EEDB7AD0082D317 /* AppDelegate.swift in Sources */,
-				D00484EA1EEDB8F40082D317 /* PrikbordController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

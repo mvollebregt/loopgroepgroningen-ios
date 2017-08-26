@@ -11,7 +11,10 @@
 import UIKit
 import CoreData
 
-class PrikbordController: UITableViewController, NSFetchedResultsControllerDelegate {
+class PrikbordController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UITextViewDelegate {
+    
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet var textView: UITextView!
     
     var fetchedResultsController: NSFetchedResultsController<BerichtMO>!
     
@@ -60,6 +63,13 @@ class PrikbordController: UITableViewController, NSFetchedResultsControllerDeleg
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 230 // TODO
+        tableView.allowsSelection = false
+        
+//        textView.layer.borderWidth = 5.0
+        
+        textView.layer.borderWidth = 1
+        textView.layer.borderColor = UIColor.lightGray.cgColor
+        textView.layer.cornerRadius = 8
         
         initializeFetchedResultsController()
         print("view did load")
@@ -74,7 +84,7 @@ class PrikbordController: UITableViewController, NSFetchedResultsControllerDeleg
 
     // MARK: - Table view data source
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BerichtTableViewCell", for: indexPath) as! BerichtCell
         // Set up the cell
         guard let bericht = self.fetchedResultsController?.object(at: indexPath) else {
@@ -84,17 +94,28 @@ class PrikbordController: UITableViewController, NSFetchedResultsControllerDeleg
         return cell
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return fetchedResultsController.sections!.count
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let sections = fetchedResultsController.sections else {
             fatalError("No sections in fetchedResultsController")
         }
         let sectionInfo = sections[section]
         return sectionInfo.numberOfObjects
     }
+    
+//    func textViewDidChange(_ textView: UITextView) {
+//        textView.isScrollEnabled = false
+//
+//        let fixedWidth = textView.frame.size.width
+//        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+//        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+//        var newFrame = textView.frame
+//        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+//        textView.frame = newFrame
+//    }
     
 //    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        return CGFloat(40 + 20 * indexPath.row);
