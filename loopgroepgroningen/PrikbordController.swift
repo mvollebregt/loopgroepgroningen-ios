@@ -17,6 +17,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var textView: UITextView!
     
     var fetchedResultsController: NSFetchedResultsController<BerichtMO>!
+    var viewAdjustedForKeyboard = false;
     
     func initializeFetchedResultsController() {
         let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
@@ -71,6 +72,16 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 8
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
+        //tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        
+        
         initializeFetchedResultsController()
         print("view did load")
         // TODO: hier ook syncen?
@@ -104,6 +115,41 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         }
         let sectionInfo = sections[section]
         return sectionInfo.numberOfObjects
+    }
+    
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if (!viewAdjustedForKeyboard) {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                self.view.frame.size.height -= keyboardSize.height
+                var newContentOffset = self.tableView.contentOffset
+                newContentOffset.y = newContentOffset.y + keyboardSize.height
+                self.tableView.setContentOffset(newContentOffset, animated: false)
+                viewAdjustedForKeyboard = true;
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        print(self.tableView.contentOffset)
+        if (viewAdjustedForKeyboard) {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                self.view.frame.size.height += keyboardSize.height
+                var newContentOffset = self.tableView.contentOffset
+                newContentOffset.y = newContentOffset.y - keyboardSize.height
+                if (newContentOffset.y >= 0) {
+                    self.tableView.setContentOffset(newContentOffset, animated: false)
+                } else {
+                    self.tableView.scrollRectToVisible(CGRect(x: 0, y:0, width: 1, height: 1), animated: false)
+                }
+                viewAdjustedForKeyboard = false;
+            }
+        }
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
 //    func textViewDidChange(_ textView: UITextView) {
