@@ -76,7 +76,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
         //tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -86,6 +86,11 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         print("view did load")
         // TODO: hier ook syncen?
         PrikbordService.syncBerichten(completionHandler: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+            self.tableView.scrollToRow(at: IndexPath(row:
+                tableView(tableView, numberOfRowsInSection: 0) - 1, section: 0), at:UITableViewScrollPosition.bottom, animated: false)
     }
 
     override func didReceiveMemoryWarning() {
@@ -131,17 +136,21 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        print(self.tableView.contentOffset)
         if (viewAdjustedForKeyboard) {
             if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                self.view.frame.size.height += keyboardSize.height
+                
                 var newContentOffset = self.tableView.contentOffset
                 newContentOffset.y = newContentOffset.y - keyboardSize.height
-                if (newContentOffset.y >= 0) {
+                
+                let navBarHeight = (self.navigationController?.navigationBar.intrinsicContentSize.height)!
+                    + UIApplication.shared.statusBarFrame.height
+                if (newContentOffset.y >= -navBarHeight) {
                     self.tableView.setContentOffset(newContentOffset, animated: false)
                 } else {
-                    self.tableView.scrollRectToVisible(CGRect(x: 0, y:0, width: 1, height: 1), animated: false)
+                    self.tableView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: false)
                 }
+                
+                self.view.frame.size.height += keyboardSize.height
                 viewAdjustedForKeyboard = false;
             }
         }
