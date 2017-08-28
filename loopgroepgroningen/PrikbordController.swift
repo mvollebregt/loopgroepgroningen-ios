@@ -97,8 +97,11 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        let lastRow = tableView(tableView, numberOfRowsInSection: 0) - 1;
+        if (lastRow > -1) {
             self.tableView.scrollToRow(at: IndexPath(row:
                 tableView(tableView, numberOfRowsInSection: 0) - 1, section: 0), at:UITableViewScrollPosition.bottom, animated: false)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -168,6 +171,19 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
+    
+    
+    @IBAction func onClickVerstuur(_ sender: UIButton) {
+        WebsiteService.addPrikbordEntry(bericht: textView.text) { (success) in
+            if (success) {
+                DispatchQueue.main.async {
+                    self.textView.text = ""
+                    self.dismissKeyboard()
+                }
+            }
+        }
+    }
+    
     
 //    func textViewDidChange(_ textView: UITextView) {
 //        textView.isScrollEnabled = false

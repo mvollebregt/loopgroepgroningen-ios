@@ -10,9 +10,24 @@ import UIKit
 
 class LoginViewController : UIViewController {
     
+    @IBOutlet var usernameTextField : UITextField!
+    @IBOutlet var passwordTextField : UITextField!
+    
+    var completion: ((String, String) -> ())?
+    
     @IBAction func onClick(_ sender: UIButton) {
-        // do iets met gebruikersnaam en wachtwoord
-        // check of gebruikersnaam en wachtwoord kloppen
+        
+        guard
+            let username = usernameTextField.text,
+            let password = passwordTextField.text
+        else {
+            return
+        }
+        
         self.dismiss(animated: true, completion: nil);
+
+        if let completion = completion {
+            completion(username, password)
+        }
     }
 }

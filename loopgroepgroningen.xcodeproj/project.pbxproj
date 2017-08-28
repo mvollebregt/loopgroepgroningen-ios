@@ -22,6 +22,7 @@
 		D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */; };
 		D0ABBAAF1F4DB6E400FF4C48 /* PrikbordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */; };
 		D0C971F71F27CF410046D1CB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C971F61F27CF410046D1CB /* LoginViewController.swift */; };
+		D0E6EE891F5448DE00F8C36D /* WebsiteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BerichtCell.swift; sourceTree = "<group>"; };
 		D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordController.swift; sourceTree = "<group>"; };
 		D0C971F61F27CF410046D1CB /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsiteService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				D00484C41EEDB7AD0082D317 /* LaunchScreen.storyboard */,
 				D00484C71EEDB7AD0082D317 /* Info.plist */,
 				D00484BF1EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld */,
+				D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */,
 			);
 			path = loopgroepgroningen;
 			sourceTree = "<group>";
@@ -340,6 +343,7 @@
 				D033E9461EFAE870006F0C65 /* TFHpple.m in Sources */,
 				D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */,
 				D00484B91EEDB7AD0082D317 /* AppDelegate.swift in Sources */,
+				D0E6EE891F5448DE00F8C36D /* WebsiteService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
