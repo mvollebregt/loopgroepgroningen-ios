@@ -17,9 +17,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var textView: UITextView!
     
     var fetchedResultsController: NSFetchedResultsController<BerichtMO>!
-    var viewAdjustedForKeyboard = false;
-    var storedKeyboardHeight = CGFloat(0);
-    var storedContentOffset = CGPoint.zero;
+    var currentKeyboardHeight = CGFloat(0);
     
     func initializeFetchedResultsController() {
         let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
@@ -91,7 +89,6 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground(notification:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object:nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive(notification:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object:nil)
     }
     
@@ -135,50 +132,36 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func keyboardWillShow(notification: NSNotification)  {
-        if (!viewAdjustedForKeyboard) {
-            if let keyboardHeight = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.height {
-                self.view.frame.size.height -= keyboardHeight
-                var newContentOffset = self.tableView.contentOffset
-                newContentOffset.y = newContentOffset.y + keyboardHeight
-                self.tableView.setContentOffset(newContentOffset, animated: false)
-                viewAdjustedForKeyboard = true;
-                storedKeyboardHeight = keyboardHeight;
-            }
+        if let newKeyboardHeight = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+            let keyboardHeightDiff = newKeyboardHeight - currentKeyboardHeight
+            setContentOffsetY(self.tableView.contentOffset.y + keyboardHeightDiff);
+            self.view.frame.size.height -= keyboardHeightDiff
+            currentKeyboardHeight = newKeyboardHeight;
         }
     }
+    
+    // TODO: taal van de textview/ de hele app instellen (nu verschijnt er 'select all' in plaats van 'selecteer alles')
     
     func keyboardWillHide(notification: NSNotification) {
-        if (viewAdjustedForKeyboard) {
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                
-                var newContentOffset = self.tableView.contentOffset
-                newContentOffset.y = newContentOffset.y - keyboardSize.height
-                
-                let navBarHeight = (self.navigationController?.navigationBar.intrinsicContentSize.height)!
-                    + UIApplication.shared.statusBarFrame.height
-                if (newContentOffset.y >= -navBarHeight) {
-                    self.tableView.setContentOffset(newContentOffset, animated: false)
-                } else {
-                    self.tableView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: false)
-                }
-                
-                self.view.frame.size.height += keyboardSize.height
-                viewAdjustedForKeyboard = false;
-            }
-        }
+        setContentOffsetY(self.tableView.contentOffset.y - currentKeyboardHeight)
+        self.view.frame.size.height += currentKeyboardHeight
+        currentKeyboardHeight = CGFloat(0)
     }
     
-    func appWillEnterForeground(notification: NSNotification) {
-        if (viewAdjustedForKeyboard) {
-            storedContentOffset = self.tableView.contentOffset;
+    private func setContentOffsetY(_ newContentOffsetY: CGFloat) {
+        let navBarHeight = (self.navigationController?.navigationBar.intrinsicContentSize.height)!
+            + UIApplication.shared.statusBarFrame.height
+        if (newContentOffsetY >= -navBarHeight) {
+//            print(newContentOffsetY);
+            self.tableView.setContentOffset(CGPoint(x: 0, y: newContentOffsetY), animated: false)
+        } else {
+            self.tableView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: false)
         }
     }
     
     func appDidBecomeActive(notification: NSNotification) {
-        if (viewAdjustedForKeyboard) {
-            self.tableView.contentOffset = storedContentOffset
-            self.view.frame.size.height -= storedKeyboardHeight
-        }
+        setContentOffsetY(self.tableView.contentOffset.y + currentKeyboardHeight);
+        self.view.frame.size.height -= currentKeyboardHeight;
     }
     
     func dismissKeyboard() {
