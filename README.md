@@ -7,3 +7,5 @@ Wensen voor de toekomst:
 - Inzien van het trainingsschema
 - Inzien van de agenda en opgeven voor evenementen
 - Een Android-app
+
+![screenshot](doc/screenshot.png)
