@@ -8,4 +8,4 @@ Wensen voor de toekomst:
 - Inzien van de agenda en opgeven voor evenementen
 - Een Android-app
 
-![screenshot](doc/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/mvollebregt/loopgroepgroningen/master/docs/screenshot.png "screenshot")
