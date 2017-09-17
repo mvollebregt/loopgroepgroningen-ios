@@ -46,14 +46,14 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
             tableView.insertRows(at: [newIndexPath!], with: .fade)
             break;
         default:
+            
             print("did receive fetch with type ", type)
         }
-        // TODO: als er nieuwe berichten binnenkomen en de view is al helemaal naar beneden gescrolld, dan moet je nog verder naar beneden scrollen, zodat de niewue
-        // berichten zichtbaar worden
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
+        scrollToBottom()
     }
 
     override func viewDidLoad() {
@@ -100,13 +100,17 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        scrollToBottom()
+    }
+
+    func scrollToBottom() {
         let lastRow = tableView(tableView, numberOfRowsInSection: 0) - 1;
         if (lastRow > -1) {
             self.tableView.scrollToRow(at: IndexPath(row:
                 tableView(tableView, numberOfRowsInSection: 0) - 1, section: 0), at:UITableViewScrollPosition.bottom, animated: false)
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
