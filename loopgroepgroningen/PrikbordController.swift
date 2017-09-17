@@ -15,6 +15,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBOutlet var tableView: UITableView!
     @IBOutlet var textView: UITextView!
+    @IBOutlet var sendButton: UIButton!
     
     var fetchedResultsController: NSFetchedResultsController<BerichtMO>!
     var currentKeyboardHeight = CGFloat(0);
@@ -47,6 +48,8 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         default:
             print("did receive fetch with type ", type)
         }
+        // TODO: als er nieuwe berichten binnenkomen en de view is al helemaal naar beneden gescrolld, dan moet je nog verder naar beneden scrollen, zodat de niewue
+        // berichten zichtbaar worden
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -174,6 +177,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     @IBAction func onClickVerstuur(_ sender: UIButton) {
+        // TODO: versturen-knop disablen als geen tekst ingevoerd!!!
         WebsiteService.addPrikbordEntry(bericht: textView.text) { (success) in
             if (success) {
                 DispatchQueue.main.async {
@@ -184,6 +188,9 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    func textViewDidChange(_ textView: UITextView) {
+        sendButton.isEnabled = !textView.text.isEmpty
+    }
     
 //    func textViewDidChange(_ textView: UITextView) {
 //        textView.isScrollEnabled = false
