@@ -20,6 +20,9 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     var fetchedResultsController: NSFetchedResultsController<BerichtMO>!
     var currentKeyboardHeight = CGFloat(0);
     
+    let textViewToelichting = "Plaats hier je bericht. Berichten zijn publiekelijk zichtbaar op loopgroepgroningen.nl/prikbord."
+    var textViewEmpty = true
+    
     func initializeFetchedResultsController() {
         let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
         let tijdstipSort = NSSortDescriptor(key: "volgnummer", ascending: true)
@@ -74,8 +77,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 8
-        
-        
+        plaatsToelichtingInTextView()
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
@@ -192,8 +194,39 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if (textViewEmpty) {
+            textView.text = ""
+            textView.textColor = UIColor.black
+            
+            var symTraits = textView.font?.fontDescriptor.symbolicTraits
+            symTraits!.remove([.traitItalic])
+            let fontDescriptorVar = textView.font?.fontDescriptor.withSymbolicTraits(symTraits!)
+            textView.font = UIFont(descriptor: fontDescriptorVar!, size: 17)
+
+            textViewEmpty = false
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if (textView.text.isEmpty) {
+            plaatsToelichtingInTextView()
+            textViewEmpty = true
+        }
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
-        sendButton.isEnabled = !textView.text.isEmpty
+        sendButton.isEnabled = !textView.text.isEmpty && !textViewEmpty
+    }
+    
+    func plaatsToelichtingInTextView() {
+        textView.text = textViewToelichting
+        textView.textColor = UIColor.lightGray
+        
+        var symTraits = textView.font?.fontDescriptor.symbolicTraits
+        symTraits!.insert([.traitItalic])
+        let fontDescriptorVar = textView.font?.fontDescriptor.withSymbolicTraits(symTraits!)
+        textView.font = UIFont(descriptor: fontDescriptorVar!, size: 14)
     }
     
 //    func textViewDidChange(_ textView: UITextView) {
