@@ -12,11 +12,29 @@ import UserNotifications
 
 class PrikbordService {
     
-    static func syncBerichten(completionHandler: Optional<(UIBackgroundFetchResult) -> Void>) {
-        
+    
+    
+    static func syncBerichten(completionHandler: @escaping Handler<Bool>) {
+
         // TODO: locking mechanisme op de juiste plek zetten!
         let lockQueue = DispatchQueue(label: "com.github.mvollebregt.prikbord")
         lockQueue.sync() {
+            
+            HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/prikbord",
+                HttpService.extractElements(withXPathQuery:"//div[@class='easy_frame']",
+                    slaBerichtenOp(completionHandler)));
+            
+        }
+    }
+    
+    private static func slaBerichtenOp(_ completionHandler: @escaping Handler<Bool>) -> ResponseHandler {
+        
+        return {(result) in
+
+            guard case let .success(elements) = result else {
+                completionHandler(.error())
+                return
+            }
             
             let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
@@ -25,27 +43,9 @@ class PrikbordService {
                 let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
                 request.sortDescriptors = [NSSortDescriptor(key: "volgnummer", ascending: false)]
                 let nieuwsteBericht = try managedObjectContext.fetch(request)
-
-                // berichten ophalen van website tot aan nieuwste al opgeslagen bericht
-                let url = URL(string: "http://www.loopgroepgroningen.nl/index.php/prikbord")
-                
-                let task = URLSession.shared.dataTask(with: url!) { data, response, error in
-                    guard error == nil else {
-                        print(error!)
-                        completionHandler?(UIBackgroundFetchResult.failed)
-                        return
-                    }
-                    guard let data = data else {
-                        print("Data is empty")
-                        completionHandler?(UIBackgroundFetchResult.failed)
-                        return
-                    }
-                    
-                    let parser = TFHpple.init(htmlData: data);
-                    let elements = parser?.search(withXPathQuery: "//div[@class='easy_frame']") as! [TFHppleElement]?;
-                    
+            
                     var berichten = [BerichtMO]()
-                    for element in elements! {
+                    for element in elements {
                         let bericht = mapToBerichtMO(element: element, into: managedObjectContext)
                         if (!nieuwsteBericht.isEmpty && (equal(bericht1: bericht, bericht2: nieuwsteBericht.first!))) {
                             managedObjectContext.delete(bericht)
@@ -53,7 +53,7 @@ class PrikbordService {
                         }
                         berichten.append(bericht)
                     }
-                    
+                
                     print("nieuwe berichten", berichten.count)
                     
                     // opslaan van alle nieuwe berichten
@@ -68,17 +68,17 @@ class PrikbordService {
                         try managedObjectContext.save()
                     } catch {
                         print("kon managed object context niet opslaan")
-                        completionHandler?(UIBackgroundFetchResult.failed)
+                        completionHandler(.error())
                     }
                     
                     notify(berichten: berichten);
 
-                    completionHandler?(berichten.count == 0 ? UIBackgroundFetchResult.noData : UIBackgroundFetchResult.newData)
-                }
-                task.resume()
+                    completionHandler(.success(berichten.count > 0))
+                
             }
             catch {
-                fatalError("Synchronisatie mislukt")
+                print("synchronisatie mislukt")
+                completionHandler(.error())
             }
         }
     }

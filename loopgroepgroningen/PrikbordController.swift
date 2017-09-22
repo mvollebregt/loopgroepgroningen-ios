@@ -20,7 +20,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     var fetchedResultsController: NSFetchedResultsController<BerichtMO>!
     var currentKeyboardHeight = CGFloat(0);
     
-    let textViewToelichting = "Plaats hier je bericht. Berichten zijn publiekelijk zichtbaar op loopgroepgroningen.nl/prikbord."
+    let textViewToelichting = "Typ hier je bericht. Berichten zijn ook voor niet-leden zichtbaar op loopgroepgroningen.nl/prikbord."
     var textViewEmpty = true
     
     func initializeFetchedResultsController() {
@@ -88,7 +88,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         initializeFetchedResultsController()
         print("view did load")
         // TODO: hier ook syncen?
-        PrikbordService.syncBerichten(completionHandler: nil)
+        PrikbordService.syncBerichten(completionHandler: {(result) in })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -183,7 +183,6 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     @IBAction func onClickVerstuur(_ sender: UIButton) {
-        // TODO: versturen-knop disablen als geen tekst ingevoerd!!!
         WebsiteService.addPrikbordEntry(bericht: textView.text) { (success) in
             if (success) {
                 DispatchQueue.main.async {
@@ -227,6 +226,12 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         symTraits!.insert([.traitItalic])
         let fontDescriptorVar = textView.font?.fontDescriptor.withSymbolicTraits(symTraits!)
         textView.font = UIFont(descriptor: fontDescriptorVar!, size: 14)
+    }
+    
+    @IBAction func onClickTestLogin(_ sender: UIButton) {
+        WebsiteService.testLogin { (success) in
+            print(success)
+        }
     }
     
 //    func textViewDidChange(_ textView: UITextView) {

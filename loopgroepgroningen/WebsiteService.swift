@@ -23,6 +23,12 @@ class WebsiteService {
                  formSelector: "@name='gbookForm'",
                  params: ["gbtext": bericht],
                  completion: completion)
+        // TODO: response is prikbord zelf! dit kan ik uitlezen om het prikbord weer te verversen!
+        // TODO: als niet gelukt/offline, dan bericht bewaren voor later?
+    }
+    
+    static func testLogin(completion: @escaping (Bool) -> ()) {
+        getProtectedInfo(url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst", completionHandler: completion)
     }
     
     private static func tryLogin(completion: @escaping (Bool) -> ()) {
@@ -30,9 +36,8 @@ class WebsiteService {
 //        OperationQueue.main.addOperation {
             let application = UIApplication.shared
             
-            // check of gebruiker ingelogd, zo niet, dan loginvenster tonen
             let rootViewController = application.keyWindow?.rootViewController
-            if (!(rootViewController?.presentedViewController is LoginViewController)) {
+//            if (!(rootViewController?.presentedViewController is LoginViewController)) {
                 let loginViewController = UIStoryboard(name: "Main", bundle: nil)
                     .instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
                 loginViewController.completion = { (username, password) in
@@ -40,10 +45,51 @@ class WebsiteService {
                 }
                 rootViewController?.present(
                     loginViewController, animated: true, completion: nil);
-            }
+            
+                // MODAL maken?!?
+            
+//            }
         }
 //        );
     }
+    
+    private static func getProtectedInfo(url: String, completionHandler: @escaping (Bool) -> ()) {
+        
+        let urlObj = URL(string: url)
+        
+        let task = URLSession.shared.dataTask(with: urlObj!) { data, response, error in
+            guard error == nil else {
+                print(error!)
+                completionHandler(false)
+                return
+            }
+            guard let _ = response, let data = data else {
+                print("Data is empty")
+                completionHandler(false)
+                return
+            }
+            
+            if (!loggedIn(data: data)) {
+                tryLogin() { (success) in
+                    if (success) {
+                        // opnieuw proberen na login
+                        getProtectedInfo(url: url, completionHandler: completionHandler)
+                        return
+                    }
+                }
+            }
+            
+            // testcode:
+            let parser = TFHpple.init(htmlData: data);
+            let elements = parser?.search(withXPathQuery: "//a[@href='/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst/16-adri-bouma']") as! [TFHppleElement]?;
+            for element in elements! {
+                print(element.text())
+            }
+            
+        }
+        task.resume()
+    }
+    
     
     private static func postForm(url: String, formSelector: String, params: [String: String], completion: @escaping (Bool) -> ()) {
         
@@ -67,7 +113,7 @@ class WebsiteService {
             print(String(data: data, encoding: String.Encoding.utf8)!)
             print(response.url as Any)
             
-            if (!loggedIn(request: url, response: response)) {
+            if (!loggedIn(data: data) && formSelector != "@id='login-form'") {
                 tryLogin() { (success) in
                     if (success) {
                         // opnieuw proberen na login
@@ -110,7 +156,8 @@ class WebsiteService {
             var request = URLRequest(url: urlObj)
             request.httpMethod = "POST"
             request.httpBody = body.data(using: .utf8)
-            
+
+            // FORM DAADWERKELIJK POSTEN
             let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
 
                 // verwerk resultaat van form post
@@ -118,7 +165,10 @@ class WebsiteService {
                 print(String(data: data!, encoding: String.Encoding.utf8) as Any)
                 print(response!.url as Any)
 
-                if (!loggedIn(request: url, response: response!)) {
+                if (!loggedIn(data: data!)) {
+                    // TODO: check op wel of niet ingelogd werkt niet.
+                    // als ik een post doe uit /prikbord/entry/add word ik doorgelust naar prikbord, en dat is helemaal prima
+                    // maar de app denkt dat ik dan niet meer ingelogd ben!
                     tryLogin() { (success) in
                         if (success) {
                             // opnieuw proberen na login
@@ -136,9 +186,25 @@ class WebsiteService {
         task.resume()
     }
     
-    private static func loggedIn(request: String, response: URLResponse) -> Bool {
-        print(request);
-        print((response.url?.absoluteString)!);
-        return (response.url?.absoluteString)! == request;
+    private static func loggedIn(data: Data) -> Bool {
+        let parser = TFHpple.init(htmlData: data);
+        // zoek naar buttons met de tekst "inloggen"
+        let loginElements = parser?.search(withXPathQuery: String(format: "//button[@type=\"submit\"]")) as! [TFHppleElement]
+        
+        for element in loginElements {
+            let value = element.attributes["value"] as! String?
+            if (value != nil && value!.lowercased().contains("inloggen")) {
+                return false;
+            }
+            if element.text().lowercased().contains("inloggen") {
+                return false;
+            }
+        }
+
+        return true;
+        
+        //        print(request);
+//        print((response.url?.absoluteString)!);
+//        return (response.url?.absoluteString)! == request;
     }
 }

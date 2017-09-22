@@ -58,7 +58,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("background fetch started!")
-        PrikbordService.syncBerichten(completionHandler: completionHandler)
+        PrikbordService.syncBerichten(completionHandler: {(result) in
+            switch result {
+                case .error() : completionHandler(UIBackgroundFetchResult.failed)
+                case .success(true): completionHandler(UIBackgroundFetchResult.newData)
+                case .success(false): completionHandler(UIBackgroundFetchResult.noData)
+            }
+        })
     }
 
     // MARK: - Core Data stack

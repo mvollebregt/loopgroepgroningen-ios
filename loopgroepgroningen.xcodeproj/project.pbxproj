@@ -20,6 +20,7 @@
 		D033E9481EFAE870006F0C65 /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D033E9451EFAE870006F0C65 /* XPathQuery.m */; };
 		D033E94B1EFAE90C006F0C65 /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D033E94A1EFAE90C006F0C65 /* libxml2.2.tbd */; };
 		D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */; };
+		D07995C11F755ED7000EB7B4 /* HttpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07995C01F755ED7000EB7B4 /* HttpService.swift */; };
 		D0ABBAAF1F4DB6E400FF4C48 /* PrikbordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */; };
 		D0C971F71F27CF410046D1CB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C971F61F27CF410046D1CB /* LoginViewController.swift */; };
 		D0E6EE891F5448DE00F8C36D /* WebsiteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */; };
@@ -66,6 +67,7 @@
 		D033E9451EFAE870006F0C65 /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
 		D033E94A1EFAE90C006F0C65 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BerichtCell.swift; sourceTree = "<group>"; };
+		D07995C01F755ED7000EB7B4 /* HttpService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpService.swift; sourceTree = "<group>"; };
 		D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordController.swift; sourceTree = "<group>"; };
 		D0C971F61F27CF410046D1CB /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsiteService.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				D00484C71EEDB7AD0082D317 /* Info.plist */,
 				D00484BF1EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld */,
 				D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */,
+				D07995C01F755ED7000EB7B4 /* HttpService.swift */,
 			);
 			path = loopgroepgroningen;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				D0C971F71F27CF410046D1CB /* LoginViewController.swift in Sources */,
 				D00AD5251EFC2D8600E36C74 /* PrikbordService.swift in Sources */,
 				D00484C11EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld in Sources */,
+				D07995C11F755ED7000EB7B4 /* HttpService.swift in Sources */,
 				D033E9471EFAE870006F0C65 /* TFHppleElement.m in Sources */,
 				D033E9481EFAE870006F0C65 /* XPathQuery.m in Sources */,
 				D0ABBAAF1F4DB6E400FF4C48 /* PrikbordController.swift in Sources */,
