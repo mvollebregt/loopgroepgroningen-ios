@@ -28,6 +28,7 @@ class WebsiteService {
     }
     
     static func testLogin(completion: @escaping (Bool) -> ()) {
+        
         getProtectedInfo(url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst", completionHandler: completion)
     }
     

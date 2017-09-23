@@ -229,9 +229,17 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @IBAction func onClickTestLogin(_ sender: UIButton) {
-        WebsiteService.testLogin { (success) in
-            print(success)
-        }
+        PrikbordService.testLogin({(result) in
+            let message : String;
+            switch result {
+                case .success(true): message = "je bent ingelogd"
+                case .success(false): message = "test niet succesvol"
+                case .error(): message = "er is een fout opgetreden"
+            }
+            let alert = UIAlertController(title: "Test Login", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            sender.inputViewController?.present(alert, animated: true, completion: nil)
+        })
     }
     
 //    func textViewDidChange(_ textView: UITextView) {

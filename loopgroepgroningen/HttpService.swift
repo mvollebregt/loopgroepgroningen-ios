@@ -27,34 +27,6 @@ typealias ResponseHandler = Handler<[TFHppleElement]>
 class HttpService {
     
     
-    
-    
-    
-    
-    
-    // extraheer elementen met xpath
-    public static func extractElements(withXPathQuery: String, params: Any?..., _ completionHandler: @escaping ResponseHandler) -> HttpHandler {
-        return {(result) in
-
-            guard case let .success((data, _)) = result else {
-                completionHandler(.error());
-                return
-            }
-            
-            guard let parser = TFHpple.init(htmlData: data) else {
-                handleError(completionHandler, "Parser could not be initialised for data: %@", data)
-                return
-            }
-            
-            guard let elements = parser.search(withXPathQuery: String(format:withXPathQuery, params)) as! [TFHppleElement]? else {
-                handleError(completionHandler, "No elements found")
-                return
-            }
-            
-            completionHandler(.success(elements));
-        }
-    }
-    
     // voer een get-request uit
     public static func get(url: String, _ completionHandler: @escaping HttpHandler) {
         
@@ -80,12 +52,72 @@ class HttpService {
         task.resume();
     }
     
+    // extraheer elementen met xpath
+    public static func extractElements(withXPathQuery: String, params: Any?..., _ completionHandler: @escaping ResponseHandler) -> HttpHandler {
+        return {(result) in
+            
+            guard case let .success((data, _)) = result else {
+                completionHandler(.error());
+                return
+            }
+            
+            guard let parser = TFHpple.init(htmlData: data) else {
+                handleError(completionHandler, "Parser could not be initialised for data: %@", data)
+                return
+            }
+            
+            guard let elements = parser.search(withXPathQuery: String(format:withXPathQuery, params)) as! [TFHppleElement]? else {
+                handleError(completionHandler, "No elements found")
+                return
+            }
+            
+            completionHandler(.success(elements));
+        }
+    }
+    
+    // stop als niet ingelogd
+    public static func checkLogin<T>(retry: @escaping((@escaping Handler<T>) -> Void),
+                                  with: @escaping Handler<T>,
+                                  _ completionHandler: @escaping HttpHandler) -> HttpHandler {
+        
+        return {(httpResult) in
+            
+            extractElements(withXPathQuery: "//button[@type=\"submit\"]", {(response) in
+                
+                guard case let .success(loginElements) = response else {
+                    completionHandler(.error());
+                    return
+                }
+                
+                // is er een button met de tekst "inloggen"?
+                for element in loginElements {
+                    let value = element.attributes["value"] as! String?
+                    if (value != nil && value!.lowercased().contains("inloggen")) {
+                        // login en begin weer van voren af aan
+                        LoginService.promptUserLogin({() in retry(with)});
+                        return
+                    }
+                    if element.text().lowercased().contains("inloggen") {
+                        // login en begin weer van voren af aan
+                        LoginService.promptUserLogin({() in retry(with)});
+                        return
+                    }
+                }
+                
+                // zo nee: ga verder met het oorspronkelijke resultaat
+                completionHandler(httpResult);
+                
+            })(httpResult);
+            
+        }
+    }
     
     // handel een onverwachte foutsituatie af
     private static func handleError<T>(_ completionHandler: Handler<T>, _ error: String, _ params: Any?...) {
         print(error);
         completionHandler(.error());
     }
+
     
 //    
 //    

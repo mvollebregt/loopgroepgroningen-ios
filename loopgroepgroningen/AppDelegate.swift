@@ -60,9 +60,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("background fetch started!")
         PrikbordService.syncBerichten(completionHandler: {(result) in
             switch result {
-                case .error() : completionHandler(UIBackgroundFetchResult.failed)
                 case .success(true): completionHandler(UIBackgroundFetchResult.newData)
                 case .success(false): completionHandler(UIBackgroundFetchResult.noData)
+                default: completionHandler(UIBackgroundFetchResult.failed)
             }
         })
     }

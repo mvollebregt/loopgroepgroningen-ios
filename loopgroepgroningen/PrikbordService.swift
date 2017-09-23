@@ -13,7 +13,7 @@ import UserNotifications
 class PrikbordService {
     
     
-    
+    // synchroniseert de berichten: geeft true terug als er nieuwe berichten zijn en false als dat niet zo is
     static func syncBerichten(completionHandler: @escaping Handler<Bool>) {
 
         // TODO: locking mechanisme op de juiste plek zetten!
@@ -27,12 +27,32 @@ class PrikbordService {
         }
     }
     
+    // test of de gebruiker is ingelogd: geeft true terug indien de gebruiker heeft ingelogd en de informatie achter de inlog goed is opgehaald
+    static func testLogin(_ completionHandler: @escaping Handler<Bool>) {
+        
+        HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst",
+            HttpService.checkLogin(retry: testLogin, with: completionHandler,
+                HttpService.extractElements(withXPathQuery: "//a[@href='/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst/16-adri-bouma']",{(result) in
+                    
+                        // we verwachten een succesvol resultaat
+                        guard case let .success(elements) = result else {
+                            completionHandler(.error());
+                            return
+                        }
+
+                        // als er elementen zijn is de informatie goed opgehaald
+                        completionHandler(.success(!elements.isEmpty))
+                    }
+        )));
+    }
+
+    
     private static func slaBerichtenOp(_ completionHandler: @escaping Handler<Bool>) -> ResponseHandler {
         
         return {(result) in
 
             guard case let .success(elements) = result else {
-                completionHandler(.error())
+                completionHandler(.error());
                 return
             }
             
