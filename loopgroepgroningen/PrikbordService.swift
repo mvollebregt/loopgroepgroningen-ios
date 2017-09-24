@@ -30,8 +30,8 @@ class PrikbordService {
     // test of de gebruiker is ingelogd: geeft true terug indien de gebruiker heeft ingelogd en de informatie achter de inlog goed is opgehaald
     static func testLogin(_ completionHandler: @escaping Handler<Bool>) {
         
-        HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst",
-            LoginService.checkLogin(retry: testLogin, with: completionHandler,
+        LoginService.checkLogin {
+            HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst",
                 HttpService.extractElements(withXPathQuery: "//a[@href='/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst/16-adri-bouma']",{(result) in
                     
                         // we verwachten een succesvol resultaat
@@ -43,7 +43,8 @@ class PrikbordService {
                         // als er elementen zijn is de informatie goed opgehaald
                         completionHandler(.success(!elements.isEmpty))
                     }
-        )));
+            ))
+        };
     }
 
     

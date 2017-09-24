@@ -10,44 +10,43 @@ import UIKit
 
 class LoginService {
     
-    // probeer opnieuw als niet ingelogd
-    public static func checkLogin<T>(retry: @escaping((@escaping Handler<T>) -> Void),
-                                  with: @escaping Handler<T>,
-                                  _ completionHandler: @escaping HttpHandler) -> HttpHandler {
+    // vraag de user om in te loggen, als hij nog niet ingelogd is
+    static func checkLogin(_ completionHandler: @escaping () -> ()) {
         
-        return {(httpResult) in
+        HttpService.get(
+            url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
             
-            HttpService.extractElements(withXPathQuery: "//button[@type=\"submit\"]", {(response) in
-                
-                guard case let .success(loginElements) = response else {
-                    completionHandler(.error());
-                    return
-                }
-                
-                // is er een button met de tekst "inloggen"?
-                for element in loginElements {
-                    let value = element.attributes["value"] as! String?
-                    if (value != nil && value!.lowercased().contains("inloggen")) {
-                        // login en begin weer van voren af aan
-                        LoginService.promptUserLogin({() in retry(with)});
+                HttpService.extractElements(withXPathQuery: "//button[@type=\"submit\"]", {(response) in
+                    
+                    guard case let .success(loginElements) = response else {
+                        // fout bij inloggen: kap ermee
+                        print("Fout bij checken op geldige login");
                         return
                     }
-                    if element.text().lowercased().contains("inloggen") {
-                        // login en begin weer van voren af aan
-                        LoginService.promptUserLogin({() in retry(with)});
-                        return
+                    
+                    // is er een button met de tekst "inloggen"?
+                    for element in loginElements {
+                        let value = element.attributes["value"] as! String?
+                        if (value != nil && value!.lowercased().contains("inloggen")) {
+                            // vraag de gebruiker om in te loggen en check opnieuw
+                            promptUserLogin(completionHandler);
+                            return
+                        }
+                        if element.text().lowercased().contains("inloggen") {
+                            // vraag de gebruiker om in te loggen en check opnieuw
+                            promptUserLogin(completionHandler);
+                            return
+                        }
                     }
-                }
-                
-                // zo nee: ga verder met het oorspronkelijke resultaat
-                completionHandler(httpResult);
-                
-            })(httpResult);
-            
-        }
+                    
+                    // zo nee: ga verder met het oorspronkelijke resultaat
+                    completionHandler();
+                    
+                })
+        )
     }
     
-    static func promptUserLogin(_ completionHandler: @escaping () -> ()) {
+    private static func promptUserLogin(_ completionHandler: @escaping () -> ()) {
         
         DispatchQueue.main.async {
             
@@ -58,39 +57,21 @@ class LoginService {
                 .instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
             
             loginViewController.completion = { (username, password) in
-                login(username: username, password: password, {(result) in
-                    
-                    switch result {
-                    case .success(true): completionHandler() // als succesvol ingelogd: ga verder
-                    case .success(false): promptUserLogin(completionHandler) // als niet succesvol ingelogd: probeer opnieuw
-                    case .error(): //bij fout: toon melding en breek af
-                        let alert = UIAlertController(title: "Fout", message: "Fout bij inloggen. Probeer het later opnieuw.", preferredStyle: UIAlertControllerStyle.alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                        rootViewController?.present(alert, animated: true, completion: nil)
-                    }
-                })
-            }
+                login(username: username, password: password, completionHandler)}
             
             rootViewController?.present(
                 loginViewController, animated: true, completion: nil);
         }
     }
     
-    static func login(username: String, password: String, _ completionHandler: @escaping (Result<Bool>) -> ()) {
+    private static func login(username: String, password: String, _ completionHandler: @escaping () -> ()) {
         
-        HttpService.postFormNotAuthenticated(
+        HttpService.postForm(
                 url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
                 formSelector: "@id='login-form'",
                 params: ["username": username, "password": password],
-            checkLogin(retry: {(completionHandler) in completionHandler(.success(false))}, with: completionHandler,
-            {(result) in
-                guard case .success(_) = result else {
-                    print("Error logging in")
-                    completionHandler(.error())
-                    return
-                }
-                completionHandler(.success(true))
-            })
+                // probeer het weer opnieuw
+                {(_) in checkLogin(completionHandler)}
         )
     }
 

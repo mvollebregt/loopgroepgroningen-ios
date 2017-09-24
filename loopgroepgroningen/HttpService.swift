@@ -37,50 +37,6 @@ class HttpService {
         doRequest(request: URLRequest(url: urlObj), completionHandler)
     }
     
-    // voer een post-request uit
-    private static func post(url: String, params: [String: String], _ completionHandler: @escaping HttpHandler) {
-
-        guard let urlObj = URL(string: url) else {
-            handleError(completionHandler, "ongeldige URL: %@", url)
-            return
-        }
-
-        // request body maken
-        var body = ""
-        for keyValue in params {
-            if (body != "") {
-                body += "&"
-            }
-            body += keyValue.key + "=" + keyValue.value
-        }
-
-        var request = URLRequest(url: urlObj)
-        request.httpMethod = "POST"
-        request.httpBody = body.data(using: .utf8)
-        
-        doRequest(request: request, completionHandler)
-    }
-    
-    // voer een request uit
-    private static func doRequest(request: URLRequest, _ completionHandler: @escaping HttpHandler) {
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            
-            guard error == nil else {
-                handleError(completionHandler, "fout bij opvragen URL", (request.url, error))
-                return
-            }
-            
-            guard let response = response, let data = data else {
-                handleError(completionHandler, "geen data bij opvragen URL %@", request.url)
-                return
-            }
-            
-            completionHandler(.success(data, response))
-        }
-        task.resume();
-    }
-    
     // extraheer elementen met xpath
     public static func extractElements(withXPathQuery: String, _ completionHandler: @escaping ResponseHandler) -> HttpHandler {
         return {(result) in
@@ -102,6 +58,13 @@ class HttpService {
             
             completionHandler(.success(elements));
         }
+    }
+    
+    // haal een form op en post het met parameters
+    public static func postForm(url: String, formSelector: String, params: [String: String], _ completionHandler: @escaping HttpHandler) {
+        get(url: url,
+            postFromGet(url: url, formSelector: formSelector, params: params,
+                        completionHandler));
     }
     
     // doe een form post
@@ -141,19 +104,48 @@ class HttpService {
             
     }
     
-    // haal een form op en post het met parameters, zonder dat login nodig is
-    public static func postFormNotAuthenticated(url: String, formSelector: String, params: [String: String], _ completionHandler: @escaping HttpHandler) {
-        get(url: url,
-            postFromGet(url: url, formSelector: formSelector, params: params,
-                        completionHandler));
+    // voer een post-request uit
+    private static func post(url: String, params: [String: String], _ completionHandler: @escaping HttpHandler) {
+        
+        guard let urlObj = URL(string: url) else {
+            handleError(completionHandler, "ongeldige URL: %@", url)
+            return
+        }
+        
+        // request body maken
+        var body = ""
+        for keyValue in params {
+            if (body != "") {
+                body += "&"
+            }
+            body += keyValue.key + "=" + keyValue.value
+        }
+        
+        var request = URLRequest(url: urlObj)
+        request.httpMethod = "POST"
+        request.httpBody = body.data(using: .utf8)
+        
+        doRequest(request: request, completionHandler)
     }
-    
-    // haal een form op en post het met parameters, met login-check
-    public static func postForm(url: String, formSelector: String, params: [String: String], _ completionHandler: @escaping HttpHandler) {
-        get(url: url,
-            LoginService.checkLogin(retry: {(completionHandler) in postForm(url: url, formSelector: formSelector, params: params, completionHandler)}, with: completionHandler,
-                postFromGet(url: url, formSelector: formSelector, params: params,
-                            completionHandler)))
+
+    // voer een request uit
+    private static func doRequest(request: URLRequest, _ completionHandler: @escaping HttpHandler) {
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            
+            guard error == nil else {
+                handleError(completionHandler, "fout bij opvragen URL", (request.url, error))
+                return
+            }
+            
+            guard let response = response, let data = data else {
+                handleError(completionHandler, "geen data bij opvragen URL %@", request.url)
+                return
+            }
+            
+            completionHandler(.success(data, response))
+        }
+        task.resume();
     }
     
     // handel een onverwachte foutsituatie af
@@ -165,7 +157,9 @@ class HttpService {
         }
         completionHandler(.error());
     }
+    
 
+    
     
 //    
 //    
