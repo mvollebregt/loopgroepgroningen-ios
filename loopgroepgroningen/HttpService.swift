@@ -26,7 +26,6 @@ typealias ResponseHandler = Handler<[TFHppleElement]>
 
 class HttpService {
     
-    
     // voer een get-request uit
     public static func get(url: String, _ completionHandler: @escaping HttpHandler) {
         
@@ -34,16 +33,46 @@ class HttpService {
             handleError(completionHandler, "ongeldige URL: %@", url)
             return
         }
+
+        doRequest(request: URLRequest(url: urlObj), completionHandler)
+    }
+    
+    // voer een post-request uit
+    private static func post(url: String, params: [String: String], _ completionHandler: @escaping HttpHandler) {
+
+        guard let urlObj = URL(string: url) else {
+            handleError(completionHandler, "ongeldige URL: %@", url)
+            return
+        }
+
+        // request body maken
+        var body = ""
+        for keyValue in params {
+            if (body != "") {
+                body += "&"
+            }
+            body += keyValue.key + "=" + keyValue.value
+        }
+
+        var request = URLRequest(url: urlObj)
+        request.httpMethod = "POST"
+        request.httpBody = body.data(using: .utf8)
         
-        let task = URLSession.shared.dataTask(with: urlObj) { data, response, error in
+        doRequest(request: request, completionHandler)
+    }
+    
+    // voer een request uit
+    private static func doRequest(request: URLRequest, _ completionHandler: @escaping HttpHandler) {
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             
             guard error == nil else {
-                handleError(completionHandler, "fout bij opvragen URL %@: %@", url, error)
+                handleError(completionHandler, "fout bij opvragen URL", (request.url, error))
                 return
             }
             
             guard let response = response, let data = data else {
-                handleError(completionHandler, "geen data bij opvragen URL %@", url)
+                handleError(completionHandler, "geen data bij opvragen URL %@", request.url)
                 return
             }
             
@@ -53,7 +82,7 @@ class HttpService {
     }
     
     // extraheer elementen met xpath
-    public static func extractElements(withXPathQuery: String, params: Any?..., _ completionHandler: @escaping ResponseHandler) -> HttpHandler {
+    public static func extractElements(withXPathQuery: String, _ completionHandler: @escaping ResponseHandler) -> HttpHandler {
         return {(result) in
             
             guard case let .success((data, _)) = result else {
@@ -66,7 +95,7 @@ class HttpService {
                 return
             }
             
-            guard let elements = parser.search(withXPathQuery: String(format:withXPathQuery, params)) as! [TFHppleElement]? else {
+            guard let elements = parser.search(withXPathQuery: withXPathQuery) as! [TFHppleElement]? else {
                 handleError(completionHandler, "No elements found")
                 return
             }
@@ -75,46 +104,65 @@ class HttpService {
         }
     }
     
-    // stop als niet ingelogd
-    public static func checkLogin<T>(retry: @escaping((@escaping Handler<T>) -> Void),
-                                  with: @escaping Handler<T>,
-                                  _ completionHandler: @escaping HttpHandler) -> HttpHandler {
+    // doe een form post
+    private static func postFromGet(url: String, formSelector: String, params: [String: String], _ completionHandler: @escaping HttpHandler) -> HttpHandler {
         
-        return {(httpResult) in
+        return extractElements(withXPathQuery: String(format: "//form[%@]", formSelector), {(extractionResult) in
+
+            guard case let .success(elements) = extractionResult else {
+                handleError(completionHandler, "Formulier kon niet worden opgehaald op %@", url)
+                return
+            }
             
-            extractElements(withXPathQuery: "//button[@type=\"submit\"]", {(response) in
-                
-                guard case let .success(loginElements) = response else {
-                    completionHandler(.error());
-                    return
-                }
-                
-                // is er een button met de tekst "inloggen"?
-                for element in loginElements {
-                    let value = element.attributes["value"] as! String?
-                    if (value != nil && value!.lowercased().contains("inloggen")) {
-                        // login en begin weer van voren af aan
-                        LoginService.promptUserLogin({() in retry(with)});
-                        return
-                    }
-                    if element.text().lowercased().contains("inloggen") {
-                        // login en begin weer van voren af aan
-                        LoginService.promptUserLogin({() in retry(with)});
-                        return
-                    }
-                }
-                
-                // zo nee: ga verder met het oorspronkelijke resultaat
-                completionHandler(httpResult);
-                
-            })(httpResult);
+            guard elements.count == 1 else {
+                handleError(completionHandler, "Formulier kon niet worden opgehaald op %@", url)
+                return
+            }
             
-        }
+            let formElement = elements.first!
+            let inputs = formElement.search(withXPathQuery: "//input") as! [TFHppleElement]
+            
+            var formData : [String: String] = [:]
+            for input in inputs {
+                if let value = input.attributes["value"] {
+                    let key = input.attributes["name"] as! String
+                    formData[key] = value as? String
+                }
+            }
+            
+            // params invullen
+            for param in params {
+                formData[param.0] = param.1
+            }
+            
+            post(url: url, params: formData, completionHandler);
+
+        })
+            
+    }
+    
+    // haal een form op en post het met parameters, zonder dat login nodig is
+    public static func postFormNotAuthenticated(url: String, formSelector: String, params: [String: String], _ completionHandler: @escaping HttpHandler) {
+        get(url: url,
+            postFromGet(url: url, formSelector: formSelector, params: params,
+                        completionHandler));
+    }
+    
+    // haal een form op en post het met parameters, met login-check
+    public static func postForm(url: String, formSelector: String, params: [String: String], _ completionHandler: @escaping HttpHandler) {
+        get(url: url,
+            LoginService.checkLogin(retry: {(completionHandler) in postForm(url: url, formSelector: formSelector, params: params, completionHandler)}, with: completionHandler,
+                postFromGet(url: url, formSelector: formSelector, params: params,
+                            completionHandler)))
     }
     
     // handel een onverwachte foutsituatie af
-    private static func handleError<T>(_ completionHandler: Handler<T>, _ error: String, _ params: Any?...) {
-        print(error);
+    private static func handleError<T>(_ completionHandler: Handler<T>, _ error: String, _ param: Any? = nil) {
+        if (param == nil) {
+            print(error);
+        } else {
+            print(String(format: "%@ %@", error, String(describing: param!)));
+        }
         completionHandler(.error());
     }
 

@@ -236,9 +236,10 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
                 case .success(false): message = "test niet succesvol"
                 case .error(): message = "er is een fout opgetreden"
             }
+            let rootViewController = UIApplication.shared.keyWindow?.rootViewController
             let alert = UIAlertController(title: "Test Login", message: message, preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            sender.inputViewController?.present(alert, animated: true, completion: nil)
+            rootViewController?.present(alert, animated: true, completion: nil)
         })
     }
     

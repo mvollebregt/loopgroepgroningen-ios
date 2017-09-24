@@ -31,7 +31,7 @@ class PrikbordService {
     static func testLogin(_ completionHandler: @escaping Handler<Bool>) {
         
         HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst",
-            HttpService.checkLogin(retry: testLogin, with: completionHandler,
+            LoginService.checkLogin(retry: testLogin, with: completionHandler,
                 HttpService.extractElements(withXPathQuery: "//a[@href='/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst/16-adri-bouma']",{(result) in
                     
                         // we verwachten een succesvol resultaat

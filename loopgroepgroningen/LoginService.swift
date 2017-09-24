@@ -10,6 +10,43 @@ import UIKit
 
 class LoginService {
     
+    // probeer opnieuw als niet ingelogd
+    public static func checkLogin<T>(retry: @escaping((@escaping Handler<T>) -> Void),
+                                  with: @escaping Handler<T>,
+                                  _ completionHandler: @escaping HttpHandler) -> HttpHandler {
+        
+        return {(httpResult) in
+            
+            HttpService.extractElements(withXPathQuery: "//button[@type=\"submit\"]", {(response) in
+                
+                guard case let .success(loginElements) = response else {
+                    completionHandler(.error());
+                    return
+                }
+                
+                // is er een button met de tekst "inloggen"?
+                for element in loginElements {
+                    let value = element.attributes["value"] as! String?
+                    if (value != nil && value!.lowercased().contains("inloggen")) {
+                        // login en begin weer van voren af aan
+                        LoginService.promptUserLogin({() in retry(with)});
+                        return
+                    }
+                    if element.text().lowercased().contains("inloggen") {
+                        // login en begin weer van voren af aan
+                        LoginService.promptUserLogin({() in retry(with)});
+                        return
+                    }
+                }
+                
+                // zo nee: ga verder met het oorspronkelijke resultaat
+                completionHandler(httpResult);
+                
+            })(httpResult);
+            
+        }
+    }
+    
     static func promptUserLogin(_ completionHandler: @escaping () -> ()) {
         
         DispatchQueue.main.async {
@@ -41,8 +78,20 @@ class LoginService {
     
     static func login(username: String, password: String, _ completionHandler: @escaping (Result<Bool>) -> ()) {
         
-        completionHandler(.error());
-        
+        HttpService.postFormNotAuthenticated(
+                url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
+                formSelector: "@id='login-form'",
+                params: ["username": username, "password": password],
+            checkLogin(retry: {(completionHandler) in completionHandler(.success(false))}, with: completionHandler,
+            {(result) in
+                guard case .success(_) = result else {
+                    print("Error logging in")
+                    completionHandler(.error())
+                    return
+                }
+                completionHandler(.success(true))
+            })
+        )
     }
 
 }
