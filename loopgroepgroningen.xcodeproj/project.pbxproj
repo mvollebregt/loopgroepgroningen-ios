@@ -22,6 +22,7 @@
 		D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */; };
 		D07995C11F755ED7000EB7B4 /* HttpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07995C01F755ED7000EB7B4 /* HttpService.swift */; };
 		D07995C31F768B94000EB7B4 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07995C21F768B94000EB7B4 /* LoginService.swift */; };
+		D07995C51F77A776000EB7B4 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07995C41F77A776000EB7B4 /* Keychain.swift */; };
 		D0ABBAAF1F4DB6E400FF4C48 /* PrikbordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */; };
 		D0C971F71F27CF410046D1CB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C971F61F27CF410046D1CB /* LoginViewController.swift */; };
 		D0E6EE891F5448DE00F8C36D /* WebsiteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */; };
@@ -70,6 +71,7 @@
 		D04C6EC61EF45BAA009051B3 /* BerichtCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BerichtCell.swift; sourceTree = "<group>"; };
 		D07995C01F755ED7000EB7B4 /* HttpService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpService.swift; sourceTree = "<group>"; };
 		D07995C21F768B94000EB7B4 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
+		D07995C41F77A776000EB7B4 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordController.swift; sourceTree = "<group>"; };
 		D0C971F61F27CF410046D1CB /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsiteService.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 		D0C971F51F27CEF00046D1CB /* login */ = {
 			isa = PBXGroup;
 			children = (
+				D07995C41F77A776000EB7B4 /* Keychain.swift */,
 				D0C971F61F27CF410046D1CB /* LoginViewController.swift */,
 			);
 			name = login;
@@ -342,6 +345,7 @@
 			files = (
 				D0C971F71F27CF410046D1CB /* LoginViewController.swift in Sources */,
 				D00AD5251EFC2D8600E36C74 /* PrikbordService.swift in Sources */,
+				D07995C51F77A776000EB7B4 /* Keychain.swift in Sources */,
 				D00484C11EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld in Sources */,
 				D07995C11F755ED7000EB7B4 /* HttpService.swift in Sources */,
 				D033E9471EFAE870006F0C65 /* TFHppleElement.m in Sources */,

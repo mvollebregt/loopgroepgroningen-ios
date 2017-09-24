@@ -15,6 +15,13 @@ class LoginViewController : UIViewController {
     
     var completion: ((String, String) -> ())?
     
+    override func viewDidLoad() {
+        if let storedUserName = KeyChain.load(key: "username"), let storedPassword = KeyChain.load(key: "password") {
+            usernameTextField.text = String(data: storedUserName, encoding: String.Encoding.utf8)
+            passwordTextField.text = String(data: storedPassword, encoding: String.Encoding.utf8);
+        }
+    }
+    
     @IBAction func onClick(_ sender: UIButton) {
         
         guard
@@ -23,6 +30,9 @@ class LoginViewController : UIViewController {
         else {
             return
         }
+        
+        let _ = KeyChain.save(key: "username", data: username.data(using: String.Encoding.utf8, allowLossyConversion: false)!);
+        let _ = KeyChain.save(key: "password", data: password.data(using: String.Encoding.utf8, allowLossyConversion: false)!);
         
         self.dismiss(animated: true, completion: nil);
 
