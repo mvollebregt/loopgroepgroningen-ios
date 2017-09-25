@@ -58,13 +58,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("background fetch started!")
+        
+//        let timestamp = Date().timeIntervalSince1970;
+//        notify(message: "Background fetch gestart", timestamp: timestamp)
+        
         PrikbordService.syncBerichten(completionHandler: {(result) in
             switch result {
-                case .success(true): completionHandler(UIBackgroundFetchResult.newData)
-                case .success(false): completionHandler(UIBackgroundFetchResult.noData)
-                default: completionHandler(UIBackgroundFetchResult.failed)
+                case .success(true):
+                    completionHandler(UIBackgroundFetchResult.newData)
+                case .success(false):
+//                    self.notify(message: "Geen nieuwe berichten", timestamp: timestamp)
+                    completionHandler(UIBackgroundFetchResult.noData)
+                default:
+//                    self.notify(message: "Fout bij ophalen berichten", timestamp: timestamp)
+                    completionHandler(UIBackgroundFetchResult.failed)
             }
         })
+    }
+    
+    private func notify(message: String, timestamp: Double) {
+        let content = UNMutableNotificationContent()
+        content.title = "Background fetch"
+        content.body = message
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: String(format:"Loopgroep background fetch %f", timestamp), content: content, trigger: trigger)
+        let center = UNUserNotificationCenter.current()
+        center.add(request) { (error : Error?) in
+            if let theError = error {
+                print(theError.localizedDescription)
+            }
+        }
     }
 
     // MARK: - Core Data stack
