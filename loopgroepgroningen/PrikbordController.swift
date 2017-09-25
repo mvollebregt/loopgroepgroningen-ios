@@ -248,9 +248,9 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         PrikbordService.testLogin({(result) in
             let message : String;
             switch result {
-                case .success(true): message = "je bent ingelogd"
-                case .success(false): message = "test niet succesvol"
-                case .error(): message = "er is een fout opgetreden"
+                case .success(true): message = "Je bent ingelogd."
+                case .success(false): message = "Test niet succesvol."
+                case .error(): message = "Er is een fout opgetreden."
             }
             let rootViewController = UIApplication.shared.keyWindow?.rootViewController
             let alert = UIAlertController(title: "Inloggen", message: message, preferredStyle: UIAlertControllerStyle.alert)
