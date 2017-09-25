@@ -44,13 +44,29 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch (type) {
-        case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
-            break;
-        default:
+        
+        switch(type) {
+            case .insert:
+                if let newIndexPath2 = newIndexPath {
+                    tableView.insertRows(at: [newIndexPath2], with: .fade)
+                }
             
-            print("did receive fetch with type ", type)
+            case .delete:
+                if let indexPath2 = indexPath {
+                    tableView.deleteRows(at: [indexPath2], with: .fade)
+                }
+            
+            case .update:
+                if let indexPath2 = indexPath {
+                    tableView.deleteRows(at: [indexPath2], with: .none)
+                    tableView.insertRows(at: [indexPath2], with: .none)
+                }
+            
+            case .move:
+                if let indexPath2 = indexPath, let newIndexPath2 = newIndexPath {
+                    tableView.deleteRows(at: [indexPath2], with: .fade)
+                    tableView.insertRows(at: [newIndexPath2], with: .fade)
+                }
         }
     }
     
@@ -241,6 +257,10 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             rootViewController?.present(alert, animated: true, completion: nil)
         })
+    }
+    
+    @IBAction func onClickSync(_ sender: UIButton) {
+        PrikbordService.syncBerichten(completionHandler: {(result) in });
     }
     
 //    func textViewDidChange(_ textView: UITextView) {
