@@ -58,50 +58,52 @@ class PrikbordService {
                 return
             }
             
-            let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            DispatchQueue.main.async(execute: {
+                let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
-            do {
-                // nieuwste al opgeslagen bericht
-                let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
-                request.sortDescriptors = [NSSortDescriptor(key: "volgnummer", ascending: false)]
-                let nieuwsteBericht = try managedObjectContext.fetch(request)
-            
-                var berichten = [BerichtMO]()
-                for element in elements {
-                    let bericht = mapToBerichtMO(element: element, into: managedObjectContext)
-                    if (!nieuwsteBericht.isEmpty && (equal(bericht1: bericht, bericht2: nieuwsteBericht.first!))) {
-                        managedObjectContext.delete(bericht)
-                        break
-                    }
-                    berichten.append(bericht)
-                }
-            
-                print("nieuwe berichten", berichten.count)
-                
-                // opslaan van alle nieuwe berichten
-                var volgnummer = nieuwsteBericht.first?.volgnummer ?? -1
-                for bericht in berichten.reversed() {
-                    volgnummer += 1
-                    bericht.volgnummer = volgnummer
-//                    managedObjectContext.insert(bericht)
-                }
                 do {
-                    print("saving context")
-                    try managedObjectContext.save()
-                } catch {
-                    print("kon managed object context niet opslaan")
+                    // nieuwste al opgeslagen bericht
+                    let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
+                    request.sortDescriptors = [NSSortDescriptor(key: "volgnummer", ascending: false)]
+                    let nieuwsteBericht = try managedObjectContext.fetch(request)
+                
+                    var berichten = [BerichtMO]()
+                    for element in elements {
+                        let bericht = mapToBerichtMO(element: element, into: managedObjectContext)
+                        if (!nieuwsteBericht.isEmpty && (equal(bericht1: bericht, bericht2: nieuwsteBericht.first!))) {
+                            managedObjectContext.delete(bericht)
+                            break
+                        }
+                        berichten.append(bericht)
+                    }
+                
+                    print("nieuwe berichten", berichten.count)
+                    
+                    // opslaan van alle nieuwe berichten
+                    var volgnummer = nieuwsteBericht.first?.volgnummer ?? -1
+                    for bericht in berichten.reversed() {
+                        volgnummer += 1
+                        bericht.volgnummer = volgnummer
+    //                    managedObjectContext.insert(bericht)
+                    }
+                    do {
+                        print("saving context")
+                        try managedObjectContext.save()
+                    } catch {
+                        print("kon managed object context niet opslaan")
+                        completionHandler(.error())
+                    }
+                    
+                    notify(berichten: berichten);
+
+                    completionHandler(.success(berichten.count > 0))
+                    
+                }
+                catch {
+                    print("synchronisatie mislukt")
                     completionHandler(.error())
                 }
-                
-                notify(berichten: berichten);
-
-                completionHandler(.success(berichten.count > 0))
-                
-            }
-            catch {
-                print("synchronisatie mislukt")
-                completionHandler(.error())
-            }
+            })
         }
     }
     
