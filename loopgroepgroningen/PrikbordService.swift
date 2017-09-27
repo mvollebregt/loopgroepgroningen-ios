@@ -12,6 +12,7 @@ import UserNotifications
 
 class PrikbordService {
     
+    static let berichtenXPathQuery = "//div[@class='easy_frame']"
     
     // synchroniseert de berichten: geeft true terug als er nieuwe berichten zijn en false als dat niet zo is
     static func syncBerichten(completionHandler: @escaping Handler<Bool>) {
@@ -22,7 +23,7 @@ class PrikbordService {
             
             LoginService.noLogin (
                 HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/prikbord",
-                    HttpService.extractElements(withXPathQuery:"//div[@class='easy_frame']",
+                    HttpService.extractElements(withXPathQuery: berichtenXPathQuery,
                         slaBerichtenOp(completionHandler))))
             
         }
@@ -47,7 +48,35 @@ class PrikbordService {
             ))
         );
     }
-
+    
+    // post een bericht en ververs meteen de berichten: geeft true terug indien bericht gepost en false als dat niet zo is
+    static func verzendBericht(berichttekst: String, _ completionHandler: @escaping Handler<Bool>) {
+        
+        LoginService.checkLogin (
+            
+            HttpService.postForm(
+                url: "http://www.loopgroepgroningen.nl/index.php/prikbord/entry/add",
+                formSelector: "@name='gbookForm'",
+                params: ["gbtext": berichttekst],
+                
+                // synchroniseer de berichten adhv de response
+                {(postBerichtResult) in
+                    HttpService.extractElements(withXPathQuery: berichtenXPathQuery,
+                        slaBerichtenOp( {(synchronisatieResult) in
+                            
+                            // stuur het resultaat van het posten van het bericht terug, en NIET het resultaat van het synchroniseren
+                            switch postBerichtResult {
+                            case .error(): completionHandler(.error())
+                            case .success(_): completionHandler(.success(true)) // als we een http response hebben zal het bericht wel gepost zijn (check op fout in html?)
+                            }
+                            
+                            
+                        })
+                    )(postBerichtResult)
+                }
+            )
+        )
+    }
     
     private static func slaBerichtenOp(_ completionHandler: @escaping Handler<Bool>) -> ResponseHandler {
         

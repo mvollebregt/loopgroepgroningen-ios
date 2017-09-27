@@ -199,14 +199,26 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     @IBAction func onClickVerstuur(_ sender: UIButton) {
-        WebsiteService.addPrikbordEntry(bericht: textView.text) { (success) in
-            if (success) {
-                DispatchQueue.main.async {
+        sender.isEnabled = false
+        PrikbordService.verzendBericht(berichttekst: textView.text, { (result) in
+            
+            DispatchQueue.main.async {
+                sender.isEnabled = true
+                
+                switch result {
+                case .success(true):
+                    // bericht succesvol verzonden. verwijder bericht.
                     self.textView.text = ""
                     self.dismissKeyboard()
+                default:
+                    // fout. toon melding.
+                    let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                    let alert = UIAlertController(title: "Fout", message: "Fout bij verzenden. Probeer het later opnieuw.", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    rootViewController?.present(alert, animated: true, completion: nil)
                 }
             }
-        }
+        })
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {

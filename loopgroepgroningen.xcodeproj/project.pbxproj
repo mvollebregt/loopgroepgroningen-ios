@@ -25,7 +25,6 @@
 		D07995C51F77A776000EB7B4 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07995C41F77A776000EB7B4 /* Keychain.swift */; };
 		D0ABBAAF1F4DB6E400FF4C48 /* PrikbordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */; };
 		D0C971F71F27CF410046D1CB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C971F61F27CF410046D1CB /* LoginViewController.swift */; };
-		D0E6EE891F5448DE00F8C36D /* WebsiteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,7 +73,6 @@
 		D07995C41F77A776000EB7B4 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		D0ABBAAE1F4DB6E400FF4C48 /* PrikbordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrikbordController.swift; sourceTree = "<group>"; };
 		D0C971F61F27CF410046D1CB /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsiteService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +134,6 @@
 				D00484C41EEDB7AD0082D317 /* LaunchScreen.storyboard */,
 				D00484C71EEDB7AD0082D317 /* Info.plist */,
 				D00484BF1EEDB7AD0082D317 /* loopgroepgroningen.xcdatamodeld */,
-				D0E6EE881F5448DE00F8C36D /* WebsiteService.swift */,
 				D07995C01F755ED7000EB7B4 /* HttpService.swift */,
 				D07995C21F768B94000EB7B4 /* LoginService.swift */,
 			);
@@ -355,7 +352,6 @@
 				D033E9461EFAE870006F0C65 /* TFHpple.m in Sources */,
 				D04C6EC71EF45BAA009051B3 /* BerichtCell.swift in Sources */,
 				D00484B91EEDB7AD0082D317 /* AppDelegate.swift in Sources */,
-				D0E6EE891F5448DE00F8C36D /* WebsiteService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
