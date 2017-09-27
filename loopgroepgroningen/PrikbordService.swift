@@ -54,39 +54,51 @@ class PrikbordService {
         
         LoginService.checkLogin (
             
-            HttpService.postForm(
-                url: "http://www.loopgroepgroningen.nl/index.php/prikbord/entry/add",
-                formSelector: "@name='gbookForm'",
-                params: ["gbtext": berichttekst],
+            // De website EIST dat je EERST naar het prikbord gaat, en pas DAARNA naar het verzendformulier
+            HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/prikbord", {(result) in
                 
-                // synchroniseer de berichten adhv de response
-                {(postBerichtResult) in
-                    
-                    guard case let .success(_, response) = postBerichtResult, let url = response.url else {
-                        completionHandler(.error())
-                        return
-                    }
-                    
-                    // check dat de post wel succesvol is uitgevoerd - als we nog steeds op de entry/add-pagina zijn ging er iets mis
-                    guard !url.absoluteString.contains("entry/add") else {
-                        completionHandler(.success(false))
-                        return
-                    }
-                    
-                    HttpService.extractElements(withXPathQuery: berichtenXPathQuery,
-                        slaBerichtenOp( {(synchronisatieResult) in
+                guard case .success(_) = result else {
+                    completionHandler(.error())
+                    return
+                }
+            
+                // OK, we hebben het prikbord opgehaald, nu gaan we echt het bericht posten
+                LoginService.noLogin(
+                    HttpService.postForm(
+                        url: "http://www.loopgroepgroningen.nl/index.php/prikbord/entry/add",
+                        formSelector: "@name='gbookForm'",
+                        params: ["gbtext": berichttekst],
+                        
+                        // synchroniseer de berichten adhv de response
+                        {(postBerichtResult) in
                             
-                            // stuur het resultaat van het posten van het bericht terug, en NIET het resultaat van het synchroniseren
-                            switch postBerichtResult {
-                            case .error(): completionHandler(.error())
-                            case .success(_): completionHandler(.success(true)) // als we een http response hebben zal het bericht wel gepost zijn (check op fout in html?)
+                            guard case let .success(_, response) = postBerichtResult, let url = response.url else {
+                                completionHandler(.error())
+                                return
                             }
                             
+                            // check dat de post wel succesvol is uitgevoerd - als we nog steeds op de entry/add-pagina zijn ging er iets mis
+                            guard !url.absoluteString.contains("entry/add") else {
+                                completionHandler(.success(false))
+                                return
+                            }
                             
-                        })
-                    )(postBerichtResult)
-                }
-            )
+                            HttpService.extractElements(withXPathQuery: berichtenXPathQuery,
+                                slaBerichtenOp( {(synchronisatieResult) in
+                                    
+                                    // stuur het resultaat van het posten van het bericht terug, en NIET het resultaat van het synchroniseren
+                                    switch postBerichtResult {
+                                    case .error(): completionHandler(.error())
+                                    case .success(_): completionHandler(.success(true)) // als we een http response hebben zal het bericht wel gepost zijn (check op fout in html?)
+                                    }
+                                    
+                                    
+                                })
+                            )(postBerichtResult)
+                        }
+                    )
+                )
+            })
         )
     }
     
