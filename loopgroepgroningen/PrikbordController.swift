@@ -203,7 +203,6 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         PrikbordService.verzendBericht(berichttekst: textView.text, { (result) in
             
             DispatchQueue.main.async {
-                sender.isEnabled = true
                 
                 switch result {
                 case .success(true):
@@ -216,6 +215,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
                     let alert = UIAlertController(title: "Fout", message: "Fout bij verzenden. Probeer het later opnieuw.", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     rootViewController?.present(alert, animated: true, completion: nil)
+                    sender.isEnabled = true // de gebruiker mag het opnieuw proberen!
                 }
             }
         })
