@@ -48,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         UIApplication.shared.applicationIconBadgeNumber = 0
         UserDefaults.standard.set(0, forKey: "badgeCount")
+        PrikbordService.syncBerichten(completionHandler: {(result) in })
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

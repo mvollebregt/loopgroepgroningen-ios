@@ -22,6 +22,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     let textViewToelichting = "Typ hier je bericht. Berichten zijn ook voor niet-leden zichtbaar op loopgroepgroningen.nl/prikbord."
     var textViewEmpty = true
+    var showKeyboardAfterRotate = false
     
     func initializeFetchedResultsController() {
         let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
@@ -103,14 +104,13 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         
         initializeFetchedResultsController()
         print("view did load")
-        // TODO: hier ook syncen?
-        PrikbordService.syncBerichten(completionHandler: {(result) in })
     }
     
     override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive(notification:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object:nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -168,8 +168,6 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    // TODO: taal van de textview/ de hele app instellen (nu verschijnt er 'select all' in plaats van 'selecteer alles')
-    
     func keyboardWillHide(notification: NSNotification) {
         setContentOffsetY(self.tableView.contentOffset.y - currentKeyboardHeight)
         self.view.frame.size.height += currentKeyboardHeight
@@ -180,7 +178,6 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         let navBarHeight = (self.navigationController?.navigationBar.intrinsicContentSize.height)!
             + UIApplication.shared.statusBarFrame.height
         if (newContentOffsetY >= -navBarHeight) {
-//            print(newContentOffsetY);
             self.tableView.setContentOffset(CGPoint(x: 0, y: newContentOffsetY), animated: false)
         } else {
             self.tableView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: false)
@@ -192,6 +189,20 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         self.view.frame.size.height -= currentKeyboardHeight;
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if currentKeyboardHeight > 0 {
+            dismissKeyboard()
+            showKeyboardAfterRotate = true
+        }
+    }
+    
+    func rotated() {
+        if showKeyboardAfterRotate {
+            self.textView.becomeFirstResponder()
+            showKeyboardAfterRotate = false
+        }
+    }
+    
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
@@ -200,7 +211,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBAction func onClickVerstuur(_ sender: UIButton) {
         sender.isEnabled = false
-        PrikbordService.verzendBericht(berichttekst: textView.text, { (result) in
+        PrikbordService.verzendBericht(berichttekst: textView.text.trimmingCharacters(in: .whitespacesAndNewlines), { (result) in
             
             DispatchQueue.main.async {
                 
@@ -243,7 +254,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        sendButton.isEnabled = !textView.text.isEmpty && !textViewEmpty
+        sendButton.isEnabled = !textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !textViewEmpty
     }
     
     func plaatsToelichtingInTextView() {

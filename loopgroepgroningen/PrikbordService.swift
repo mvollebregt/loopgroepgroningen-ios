@@ -185,7 +185,7 @@ class PrikbordService {
     static func mapToBerichtMO(element: TFHppleElement, into: NSManagedObjectContext) -> BerichtMO {
         let bericht = NSEntityDescription.insertNewObject(forEntityName: "Bericht", into: into) as! BerichtMO
         bericht.auteur = getText(fromElement:element, withXPathQuery: "//*[@class='easy_big']");
-        bericht.tijdstip = getText(fromElement:element, withXPathQuery: "//*[@class='easy_small']")
+        bericht.tijdstip = formatBerichtDatum(datum: getText(fromElement:element, withXPathQuery: "//*[@class='easy_small']"))
         bericht.berichttekst = ""
         
         let berichtElements = element.search(withXPathQuery: "//*[@class='easy_content']/node()") as! [TFHppleElement]?
@@ -199,6 +199,16 @@ class PrikbordService {
         }
         return bericht
 
+    }
+    
+    static func formatBerichtDatum(datum: String) -> String {
+        let woorden = datum.split(separator: " ")
+        return String(format: "%@ %@ %@ %@ - %@",
+                      String(woorden[0][...woorden[0].index(woorden[0].startIndex, offsetBy: 1)]),
+                      String(woorden[1]),
+                      String(woorden[2][...woorden[2].index(woorden[2].startIndex, offsetBy: 2)]),
+                      String(woorden[3]),
+                      String(woorden[4]))
     }
     
     static func equal(bericht1: BerichtMO, bericht2: BerichtMO) -> Bool {
