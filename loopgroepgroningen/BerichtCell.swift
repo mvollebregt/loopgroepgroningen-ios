@@ -15,7 +15,7 @@ class BerichtCell: UITableViewCell {
     @IBOutlet weak var prikselView: UIView!
     @IBOutlet weak var auteurLabel: UILabel!
     @IBOutlet weak var tijdstipLabel: UILabel!
-    @IBOutlet weak var berichtLabel: UILabel!
+    @IBOutlet weak var berichtLabel: UITextView!
     
     private var dateFormatter = DateFormatter()
     private var _bericht : BerichtMO?
