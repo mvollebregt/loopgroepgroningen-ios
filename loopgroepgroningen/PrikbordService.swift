@@ -61,6 +61,18 @@ class PrikbordService {
                 
                 // synchroniseer de berichten adhv de response
                 {(postBerichtResult) in
+                    
+                    guard case let .success(_, response) = postBerichtResult, let url = response.url else {
+                        completionHandler(.error())
+                        return
+                    }
+                    
+                    // check dat de post wel succesvol is uitgevoerd - als we nog steeds op de entry/add-pagina zijn ging er iets mis
+                    guard !url.absoluteString.contains("entry/add") else {
+                        completionHandler(.success(false))
+                        return
+                    }
+                    
                     HttpService.extractElements(withXPathQuery: berichtenXPathQuery,
                         slaBerichtenOp( {(synchronisatieResult) in
                             
