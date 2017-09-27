@@ -10,43 +10,51 @@ import UIKit
 
 class LoginService {
     
+    // voer een actie uit zonder dat daarvoor een login vereist is
+    static func noLogin(_ completionHandler: @escaping (Result<Bool>) -> ()) {
+        completionHandler(.success(true));
+    }
+    
     // vraag de user om in te loggen, als hij nog niet ingelogd is
-    static func checkLogin(_ completionHandler: @escaping () -> ()) {
+    static func checkLogin(_ completionHandler: @escaping (Result<(Bool)>) -> ()) {
         
-        HttpService.get(
-            url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
-            
-                HttpService.extractElements(withXPathQuery: "//button[@type=\"submit\"]", {(response) in
-                    
-                    guard case let .success(loginElements) = response else {
-                        // fout bij inloggen: kap ermee
-                        print("Fout bij checken op geldige login");
-                        return
-                    }
-                    
-                    // is er een button met de tekst "inloggen"?
-                    for element in loginElements {
-                        let value = element.attributes["value"] as! String?
-                        if (value != nil && value!.lowercased().contains("inloggen")) {
-                            // vraag de gebruiker om in te loggen en check opnieuw
-                            promptUserLogin(completionHandler);
+        noLogin (
+            HttpService.get(
+                url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
+                
+                    HttpService.extractElements(withXPathQuery: "//button[@type=\"submit\"]", {(response) in
+                        
+                        guard case let .success(loginElements) = response else {
+                            // fout bij inloggen: kap ermee
+                            print("Fout bij checken op geldige login");
+                            completionHandler(.error());
                             return
                         }
-                        if element.text().lowercased().contains("inloggen") {
-                            // vraag de gebruiker om in te loggen en check opnieuw
-                            promptUserLogin(completionHandler);
-                            return
+                        
+                        // is er een button met de tekst "inloggen"?
+                        for element in loginElements {
+                            let value = element.attributes["value"] as! String?
+                            if (value != nil && value!.lowercased().contains("inloggen")) {
+                                // vraag de gebruiker om in te loggen en check opnieuw
+                                promptUserLogin(completionHandler);
+                                return
+                            }
+                            if element.text().lowercased().contains("inloggen") {
+                                // vraag de gebruiker om in te loggen en check opnieuw
+                                promptUserLogin(completionHandler);
+                                return
+                            }
                         }
-                    }
-                    
-                    // zo nee: ga verder met het oorspronkelijke resultaat
-                    completionHandler();
-                    
-                })
+                        
+                        // zo nee: ga verder met het oorspronkelijke resultaat
+                        completionHandler(.success(true));
+                        
+                    })
+            )
         )
     }
     
-    private static func promptUserLogin(_ completionHandler: @escaping () -> ()) {
+    private static func promptUserLogin(_ completionHandler: @escaping (Result<(Bool)>) -> ()) {
         
         DispatchQueue.main.async {
             
@@ -64,14 +72,16 @@ class LoginService {
         }
     }
     
-    private static func login(username: String, password: String, _ completionHandler: @escaping () -> ()) {
+    private static func login(username: String, password: String, _ completionHandler: @escaping (Result<(Bool)>) -> ()) {
         
-        HttpService.postForm(
-                url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
-                formSelector: "@id='login-form'",
-                params: ["username": username, "password": password],
-                // probeer het weer opnieuw
-                {(_) in checkLogin(completionHandler)}
+        noLogin (
+            HttpService.postForm(
+                    url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
+                    formSelector: "@id='login-form'",
+                    params: ["username": username, "password": password],
+                    // probeer het weer opnieuw
+                    {(_) in checkLogin(completionHandler)}
+            )
         )
     }
 

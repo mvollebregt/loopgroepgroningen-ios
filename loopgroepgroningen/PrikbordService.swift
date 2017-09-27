@@ -20,9 +20,10 @@ class PrikbordService {
         let lockQueue = DispatchQueue(label: "com.github.mvollebregt.prikbord")
         lockQueue.sync() {
             
-            HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/prikbord",
-                HttpService.extractElements(withXPathQuery:"//div[@class='easy_frame']",
-                    slaBerichtenOp(completionHandler)));
+            LoginService.noLogin (
+                HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/prikbord",
+                    HttpService.extractElements(withXPathQuery:"//div[@class='easy_frame']",
+                        slaBerichtenOp(completionHandler))))
             
         }
     }
@@ -30,7 +31,7 @@ class PrikbordService {
     // test of de gebruiker is ingelogd: geeft true terug indien de gebruiker heeft ingelogd en de informatie achter de inlog goed is opgehaald
     static func testLogin(_ completionHandler: @escaping Handler<Bool>) {
         
-        LoginService.checkLogin {
+        LoginService.checkLogin (
             HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst",
                 HttpService.extractElements(withXPathQuery: "//a[@href='/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst/16-adri-bouma']",{(result) in
                     
@@ -44,7 +45,7 @@ class PrikbordService {
                         completionHandler(.success(!elements.isEmpty))
                     }
             ))
-        };
+        );
     }
 
     

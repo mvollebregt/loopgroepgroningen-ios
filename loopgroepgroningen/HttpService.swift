@@ -27,14 +27,22 @@ typealias ResponseHandler = Handler<[TFHppleElement]>
 class HttpService {
     
     // voer een get-request uit
-    public static func get(url: String, _ completionHandler: @escaping HttpHandler) {
+    public static func get(url: String, _ completionHandler: @escaping HttpHandler) -> Handler<Bool> {
         
-        guard let urlObj = URL(string: url) else {
-            handleError(completionHandler, "ongeldige URL: %@", url)
-            return
-        }
+        return {(successfulLogin) in
+            
+            guard case .success(true) = successfulLogin else {
+                handleError(completionHandler, "actie gestopt ivm niet gelukte login");
+                return;
+            }
+        
+            guard let urlObj = URL(string: url) else {
+                handleError(completionHandler, "ongeldige URL: %@", url)
+                return
+            }
 
-        doRequest(request: URLRequest(url: urlObj), completionHandler)
+            doRequest(request: URLRequest(url: urlObj), completionHandler)
+        }
     }
     
     // extraheer elementen met xpath
@@ -61,10 +69,12 @@ class HttpService {
     }
     
     // haal een form op en post het met parameters
-    public static func postForm(url: String, formSelector: String, params: [String: String], _ completionHandler: @escaping HttpHandler) {
-        get(url: url,
-            postFromGet(url: url, formSelector: formSelector, params: params,
-                        completionHandler));
+    public static func postForm(url: String, formSelector: String, params: [String: String], _ completionHandler: @escaping HttpHandler) -> Handler<Bool> {
+        
+        return get(url: url,
+                postFromGet(url: url, formSelector: formSelector, params: params,
+                    completionHandler));
+
     }
     
     // doe een form post
