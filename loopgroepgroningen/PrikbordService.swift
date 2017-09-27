@@ -197,6 +197,7 @@ class PrikbordService {
                 bericht.berichttekst!.append("\n");
             }
         }
+        bericht.berichttekst = bericht.berichttekst?.trimmingCharacters(in: .whitespacesAndNewlines)
         return bericht
 
     }
