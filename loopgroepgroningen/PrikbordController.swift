@@ -223,7 +223,7 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
                 default:
                     // fout. toon melding.
                     let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-                    let alert = UIAlertController(title: "Fout", message: "Fout bij verzenden. Probeer het later opnieuw.", preferredStyle: UIAlertControllerStyle.alert)
+                    let alert = UIAlertController(title: "Fout", message: "Bericht niet verzonden. Probeer het later opnieuw.", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     rootViewController?.present(alert, animated: true, completion: nil)
                     sender.isEnabled = true // de gebruiker mag het opnieuw proberen!
@@ -275,13 +275,15 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
                 let message : String;
                 switch result {
                     case .success(true): message = "Je bent ingelogd."
-                    case .success(false): message = "Test niet succesvol."
+                    case .success(false): message = ""
                     case .error(): message = "Er is een fout opgetreden."
                 }
-                let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-                let alert = UIAlertController(title: "Inloggen", message: message, preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                rootViewController?.present(alert, animated: true, completion: nil)
+                if (message != "") {
+                    let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                    let alert = UIAlertController(title: "Inloggen", message: message, preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    rootViewController?.present(alert, animated: true, completion: nil)
+                }
             })
         })
     }

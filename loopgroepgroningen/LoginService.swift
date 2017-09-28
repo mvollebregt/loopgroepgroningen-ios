@@ -16,7 +16,7 @@ class LoginService {
     }
     
     // vraag de user om in te loggen, als hij nog niet ingelogd is
-    static func checkLogin(_ completionHandler: @escaping (Result<(Bool)>) -> ()) {
+    static func checkLogin(promptForPassword: Bool = true, _ completionHandler: @escaping (Result<(Bool)>) -> ()) {
         
         noLogin (
             HttpService.get(
@@ -32,22 +32,36 @@ class LoginService {
                         }
                         
                         // is er een button met de tekst "inloggen"?
+                        var loggedIn = true;
                         for element in loginElements {
                             let value = element.attributes["value"] as! String?
                             if (value != nil && value!.lowercased().contains("inloggen")) {
-                                // vraag de gebruiker om in te loggen en check opnieuw
-                                promptUserLogin(completionHandler);
-                                return
+                                loggedIn = false;
+                                break;
                             }
                             if element.text().lowercased().contains("inloggen") {
                                 // vraag de gebruiker om in te loggen en check opnieuw
-                                promptUserLogin(completionHandler);
-                                return
+                                loggedIn = false;
+                                break;
                             }
                         }
                         
+                        if (!loggedIn && promptForPassword) {
+                            promptUserLogin(completionHandler);
+                            return
+                        }
+                        
+                        if (!loggedIn) {
+                            DispatchQueue.main.async(execute: {
+                                let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                                let alert = UIAlertController(title: "Inloggen", message: "Inloggen mislukt", preferredStyle: UIAlertControllerStyle.alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                                rootViewController?.present(alert, animated: true, completion: nil)
+                            })
+                        }
+                        
                         // zo nee: ga verder met het oorspronkelijke resultaat
-                        completionHandler(.success(true));
+                        completionHandler(.success(loggedIn));
                         
                     })
             )
@@ -64,8 +78,17 @@ class LoginService {
             let loginViewController = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
             
-            loginViewController.completion = { (username, password) in
-                login(username: username, password: password, completionHandler)}
+            loginViewController.completion = { result in
+                
+                guard case let .success(username, password) = result else {
+                    // gebruiker heeft geannuleerd
+                    completionHandler(.success(false))
+                    return
+                }
+                
+                login(username: username, password: password, completionHandler)
+                
+            }
             
             rootViewController?.present(
                 loginViewController, animated: true, completion: nil);
@@ -79,10 +102,9 @@ class LoginService {
                     url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
                     formSelector: "@id='login-form'",
                     params: ["username": username, "password": password],
-                    // probeer het weer opnieuw
-                    {(_) in checkLogin(completionHandler)}
+                    // probeer opnieuw
+                    {(_) in checkLogin(promptForPassword: false, completionHandler)}
             )
         )
     }
-
 }

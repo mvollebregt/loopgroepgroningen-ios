@@ -13,7 +13,7 @@ class LoginViewController : UIViewController {
     @IBOutlet var usernameTextField : UITextField!
     @IBOutlet var passwordTextField : UITextField!
     
-    var completion: ((String, String) -> ())?
+    var completion: Handler<(String, String)>?
     
     override func viewDidLoad() {
         if let storedUserName = KeyChain.load(key: "username"), let storedPassword = KeyChain.load(key: "password") {
@@ -37,7 +37,16 @@ class LoginViewController : UIViewController {
         self.dismiss(animated: true, completion: nil);
 
         if let completion = completion {
-            completion(username, password)
+            completion(.success(username, password))
+        }
+    }
+    
+    @IBAction func onCancel(_ sender: UIButton) {
+        
+        self.dismiss(animated: true, completion: nil)
+        
+        if let completion = completion {
+            completion(.error())
         }
     }
 }
