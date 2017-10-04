@@ -94,7 +94,12 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 8
-        plaatsToelichtingInTextView()
+        
+        if (UserDefaults.standard.bool(forKey: "alEensIngelogd")) {
+            plaatsToelichtingInTextView()
+        } else {
+            plaatsNooitIngelogdMelding()
+        }
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
@@ -211,25 +216,49 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBAction func onClickVerstuur(_ sender: UIButton) {
         sender.isEnabled = false
-        PrikbordService.verzendBericht(berichttekst: textView.text.trimmingCharacters(in: .whitespacesAndNewlines), { (result) in
-            
-            DispatchQueue.main.async {
+        
+        if (sender.titleLabel?.text == "Inloggen") {
+            LoginService.checkLogin({result in
                 
-                switch result {
-                case .success(true):
-                    // bericht succesvol verzonden. verwijder bericht.
-                    self.textView.text = ""
-                    self.dismissKeyboard()
-                default:
-                    // fout. toon melding.
-                    let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-                    let alert = UIAlertController(title: "Fout", message: "Bericht niet verzonden. Probeer het later opnieuw.", preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                    rootViewController?.present(alert, animated: true, completion: nil)
-                    sender.isEnabled = true // de gebruiker mag het opnieuw proberen!
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(true):
+                        self.verwijderNooitIngelogdMelding();
+                        self.plaatsToelichtingInTextView();
+                        UserDefaults.standard.set(true, forKey: "alEensIngelogd")
+                    default:
+                        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                        let alert = UIAlertController(title: "Niet ingelogd", message: "Je bent niet ingelogd. Probeer het opnieuw.", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        rootViewController?.present(alert, animated: true, completion: nil)
+                        sender.isEnabled = true;
+                    }
                 }
-            }
-        })
+            })
+        }
+
+        else {
+
+            PrikbordService.verzendBericht(berichttekst: textView.text.trimmingCharacters(in: .whitespacesAndNewlines), { (result) in
+                
+                DispatchQueue.main.async {
+                    
+                    switch result {
+                    case .success(true):
+                        // bericht succesvol verzonden. verwijder bericht.
+                        self.textView.text = ""
+                        self.dismissKeyboard()
+                    default:
+                        // fout. toon melding.
+                        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                        let alert = UIAlertController(title: "Fout", message: "Bericht niet verzonden. Probeer het later opnieuw.", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        rootViewController?.present(alert, animated: true, completion: nil)
+                        sender.isEnabled = true // de gebruiker mag het opnieuw proberen!
+                    }
+                }
+            })
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -259,8 +288,26 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
     
     func plaatsToelichtingInTextView() {
         textView.text = textViewToelichting
+        styleTextViewVoorToelichting()
+    }
+    
+    func plaatsNooitIngelogdMelding() {
+        textView.text = "Log eenmalig in om berichten te kunnen plaatsen."
+        styleTextViewVoorToelichting()
+        textView.isEditable = false
+        sendButton.setTitle("Inloggen", for: .normal)
+        sendButton.isEnabled = true
+    }
+    
+    func verwijderNooitIngelogdMelding() {
+        plaatsToelichtingInTextView();
+        textView.isEditable = true
+        sendButton.setTitle("Versturen", for: .normal)
+        sendButton.isEnabled = false
+    }
+
+    func styleTextViewVoorToelichting() {
         textView.textColor = UIColor.lightGray
-        
         var symTraits = textView.font?.fontDescriptor.symbolicTraits
         symTraits!.insert([.traitItalic])
         let fontDescriptorVar = textView.font?.fontDescriptor.withSymbolicTraits(symTraits!)

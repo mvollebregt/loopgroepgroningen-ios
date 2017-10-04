@@ -54,7 +54,7 @@ class LoginService {
                         if (!loggedIn) {
                             DispatchQueue.main.async(execute: {
                                 let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-                                let alert = UIAlertController(title: "Inloggen", message: "Inloggen mislukt", preferredStyle: UIAlertControllerStyle.alert)
+                                let alert = UIAlertController(title: "Inloggen", message: "Inloggen is mislukt. Probeer het opnieuw.", preferredStyle: UIAlertControllerStyle.alert)
                                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                                 rootViewController?.present(alert, animated: true, completion: nil)
                             })
