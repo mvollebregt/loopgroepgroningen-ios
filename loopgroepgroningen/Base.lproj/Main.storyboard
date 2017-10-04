@@ -123,29 +123,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Prikbord" id="wsA-eC-OKy">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="hxZ-4X-gXz">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LUH-aq-AiP">
-                                <rect key="frame" x="16" y="7" width="107" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Synchroniseren"/>
-                                <connections>
-                                    <action selector="onClickSync:" destination="Fug-cX-Yan" eventType="touchUpInside" id="rDn-KJ-92u"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" id="Q47-RJ-rMX">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="u3k-6J-d6e">
-                                <rect key="frame" x="276" y="7" width="83" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
-                                <state key="normal" title="Inloggen"/>
-                                <connections>
-                                    <action selector="onClickTestLogin:" destination="Fug-cX-Yan" eventType="touchUpInside" id="cf2-fQ-Y43"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Prikbord" id="wsA-eC-OKy"/>
                     <connections>
                         <outlet property="sendButton" destination="fcc-s9-11O" id="Z6F-a8-lR5"/>
                         <outlet property="tableView" destination="fVl-IR-Oqu" id="zEQ-jz-bYc"/>

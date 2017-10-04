@@ -30,24 +30,24 @@ class PrikbordService {
     }
     
     // test of de gebruiker is ingelogd: geeft true terug indien de gebruiker heeft ingelogd en de informatie achter de inlog goed is opgehaald
-    static func testLogin(_ completionHandler: @escaping Handler<Bool>) {
-        
-        LoginService.checkLogin (
-            HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst",
-                HttpService.extractElements(withXPathQuery: "//a[@href='/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst/16-adri-bouma']",{(result) in
-                    
-                        // we verwachten een succesvol resultaat
-                        guard case let .success(elements) = result else {
-                            completionHandler(.error());
-                            return
-                        }
-
-                        // als er elementen zijn is de informatie goed opgehaald
-                        completionHandler(.success(!elements.isEmpty))
-                    }
-            ))
-        );
-    }
+//    static func testLogin(_ completionHandler: @escaping Handler<Bool>) {
+//
+//        LoginService.checkLogin (
+//            HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst",
+//                HttpService.extractElements(withXPathQuery: "//a[@href='/index.php/loopgroep-groningen-ledeninfo/loopgroep-groningen-ledenlijst/16-adri-bouma']",{(result) in
+//
+//                        // we verwachten een succesvol resultaat
+//                        guard case let .success(elements) = result else {
+//                            completionHandler(.error());
+//                            return
+//                        }
+//
+//                        // als er elementen zijn is de informatie goed opgehaald
+//                        completionHandler(.success(!elements.isEmpty))
+//                    }
+//            ))
+//        );
+//    }
     
     // post een bericht en ververs meteen de berichten: geeft true terug indien bericht gepost en false als dat niet zo is
     static func verzendBericht(berichttekst: String, _ completionHandler: @escaping Handler<Bool>) {

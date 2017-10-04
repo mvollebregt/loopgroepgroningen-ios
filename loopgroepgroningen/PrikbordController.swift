@@ -314,33 +314,35 @@ class PrikbordController: UIViewController, UITableViewDelegate, UITableViewData
         textView.font = UIFont(descriptor: fontDescriptorVar!, size: 14)
     }
     
-    @IBAction func onClickTestLogin(_ sender: UIButton) {
-        sender.isEnabled = false
-        PrikbordService.testLogin({(result) in
-            DispatchQueue.main.async(execute: {
-                sender.isEnabled = true
-                let message : String;
-                switch result {
-                    case .success(true): message = "Je bent ingelogd."
-                    case .success(false): message = ""
-                    case .error(): message = "Er is een fout opgetreden."
-                }
-                if (message != "") {
-                    let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-                    let alert = UIAlertController(title: "Inloggen", message: message, preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                    rootViewController?.present(alert, animated: true, completion: nil)
-                }
-            })
-        })
-    }
+//    @IBAction func onClickTestLogin(_ sender: UIButton) {
+//        sender.isEnabled = false
+//        PrikbordService.testLogin({(result) in
+//            DispatchQueue.main.async(execute: {
+//                sender.isEnabled = true
+//                let message : String;
+//                switch result {
+//                    case .success(true): message = "Je bent ingelogd."
+//                    case .success(false): message = ""
+//                    case .error(): message = "Er is een fout opgetreden."
+//                }
+//                if (message != "") {
+//                    let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+//                    let alert = UIAlertController(title: "Inloggen", message: message, preferredStyle: UIAlertControllerStyle.alert)
+//                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+//                    rootViewController?.present(alert, animated: true, completion: nil)
+//                }
+//            })
+//        })
+//    }
     
-    @IBAction func onClickSync(_ sender: UIButton) {
-        sender.isEnabled = false
-        PrikbordService.syncBerichten(completionHandler: {(result) in
-            DispatchQueue.main.async(execute: { sender.isEnabled = true })
-        });
-    }
+//    @IBAction func onClickSync(_ sender: UIButton) {
+//        sender.isEnabled = false
+//        PrikbordService.syncBerichten(completionHandler: {(result) in
+//            DispatchQueue.main.async(execute: { sender.isEnabled = true })
+//        });
+//    }
+
+    
     
 //    func textViewDidChange(_ textView: UITextView) {
 //        textView.isScrollEnabled = false
