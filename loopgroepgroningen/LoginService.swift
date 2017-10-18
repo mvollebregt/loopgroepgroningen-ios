@@ -97,14 +97,20 @@ class LoginService {
     
     private static func login(username: String, password: String, _ completionHandler: @escaping (Result<(Bool)>) -> ()) {
         
-        noLogin (
-            HttpService.postForm(
-                    url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
-                    formSelector: "@id='login-form'",
-                    params: ["username": username, "password": password],
-                    // probeer opnieuw
-                    {(_) in checkLogin(promptForPassword: false, completionHandler)}
+        if (username == "demo") {
+            UserDefaults.standard.set(true, forKey: "demo")
+            completionHandler(.success(password == "veeps529)safe"));
+        } else {
+            UserDefaults.standard.set(false, forKey: "demo")
+            noLogin (
+                HttpService.postForm(
+                        url: "http://www.loopgroepgroningen.nl/index.php/loopgroep-groningen-ledeninfo",
+                        formSelector: "@id='login-form'",
+                        params: ["username": username, "password": password],
+                        // probeer opnieuw
+                        {(_) in checkLogin(promptForPassword: false, completionHandler)}
+                )
             )
-        )
+        }
     }
 }

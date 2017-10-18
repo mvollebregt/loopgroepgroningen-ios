@@ -52,54 +52,91 @@ class PrikbordService {
     // post een bericht en ververs meteen de berichten: geeft true terug indien bericht gepost en false als dat niet zo is
     static func verzendBericht(berichttekst: String, _ completionHandler: @escaping Handler<Bool>) {
         
-        LoginService.checkLogin (
+        if UserDefaults.standard.bool(forKey: "demo") {
             
-            // De website EIST dat je EERST naar het prikbord gaat, en pas DAARNA naar het verzendformulier
-            HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/prikbord", {(result) in
+            do {
+                let into = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                // nieuwste al opgeslagen bericht
+                let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
+                request.sortDescriptors = [NSSortDescriptor(key: "volgnummer", ascending: false)]
+                let nieuwsteBericht = try into.fetch(request)
                 
-                guard case .success(_) = result else {
-                    completionHandler(.error())
-                    return
-                }
+                let bericht = NSEntityDescription.insertNewObject(forEntityName: "Bericht", into: into) as! BerichtMO
+                bericht.auteur = "demo"
+                
+                let myCalendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
+                let now = Date();
+                let weekDayNum = myCalendar.component(.weekday, from: now)
+                var date = ["za", "zo", "ma" ,"di", "wo", "do", "vr", "za"][weekDayNum]
+                let formatter = DateFormatter()
+                formatter.dateFormat = " dd "
+                date += formatter.string(from: now);
+                let monthNum = myCalendar.component(.month, from: now)
+                date += ["dec", "jan", "feb", "maa", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"][monthNum]
+                formatter.dateFormat = " yyyy - HH:mm"
+                date += formatter.string(from: now);
+                bericht.tijdstip = date
+                bericht.berichttekst = berichttekst
+                bericht.volgnummer = (nieuwsteBericht.first?.volgnummer ?? -1) + 1
+                completionHandler(.success(true))
+            }
+            catch {
+                print("synchronisatie mislukt")
+                completionHandler(.error())
+            }
+
             
-                // OK, we hebben het prikbord opgehaald, nu gaan we echt het bericht posten
-                LoginService.noLogin(
-                    HttpService.postForm(
-                        url: "http://www.loopgroepgroningen.nl/index.php/prikbord/entry/add",
-                        formSelector: "@name='gbookForm'",
-                        params: ["gbtext": berichttekst],
-                        
-                        // synchroniseer de berichten adhv de response
-                        {(postBerichtResult) in
+        } else {
+            
+            LoginService.checkLogin (
+                
+                // De website EIST dat je EERST naar het prikbord gaat, en pas DAARNA naar het verzendformulier
+                HttpService.get(url: "http://www.loopgroepgroningen.nl/index.php/prikbord", {(result) in
+                    
+                    guard case .success(_) = result else {
+                        completionHandler(.error())
+                        return
+                    }
+                
+                    // OK, we hebben het prikbord opgehaald, nu gaan we echt het bericht posten
+                    LoginService.noLogin(
+                        HttpService.postForm(
+                            url: "http://www.loopgroepgroningen.nl/index.php/prikbord/entry/add",
+                            formSelector: "@name='gbookForm'",
+                            params: ["gbtext": berichttekst],
                             
-                            guard case let .success(_, response) = postBerichtResult, let url = response.url else {
-                                completionHandler(.error())
-                                return
+                            // synchroniseer de berichten adhv de response
+                            {(postBerichtResult) in
+                                
+                                guard case let .success(_, response) = postBerichtResult, let url = response.url else {
+                                    completionHandler(.error())
+                                    return
+                                }
+                                
+                                // check dat de post wel succesvol is uitgevoerd - als we nog steeds op de entry/add-pagina zijn ging er iets mis
+                                guard !url.absoluteString.contains("entry/add") else {
+                                    completionHandler(.success(false))
+                                    return
+                                }
+                                
+                                HttpService.extractElements(withXPathQuery: berichtenXPathQuery,
+                                    slaBerichtenOp( {(synchronisatieResult) in
+                                        
+                                        // stuur het resultaat van het posten van het bericht terug, en NIET het resultaat van het synchroniseren
+                                        switch postBerichtResult {
+                                        case .error(): completionHandler(.error())
+                                        case .success(_): completionHandler(.success(true)) // als we een http response hebben zal het bericht wel gepost zijn (check op fout in html?)
+                                        }
+                                        
+                                        
+                                    })
+                                )(postBerichtResult)
                             }
-                            
-                            // check dat de post wel succesvol is uitgevoerd - als we nog steeds op de entry/add-pagina zijn ging er iets mis
-                            guard !url.absoluteString.contains("entry/add") else {
-                                completionHandler(.success(false))
-                                return
-                            }
-                            
-                            HttpService.extractElements(withXPathQuery: berichtenXPathQuery,
-                                slaBerichtenOp( {(synchronisatieResult) in
-                                    
-                                    // stuur het resultaat van het posten van het bericht terug, en NIET het resultaat van het synchroniseren
-                                    switch postBerichtResult {
-                                    case .error(): completionHandler(.error())
-                                    case .success(_): completionHandler(.success(true)) // als we een http response hebben zal het bericht wel gepost zijn (check op fout in html?)
-                                    }
-                                    
-                                    
-                                })
-                            )(postBerichtResult)
-                        }
+                        )
                     )
-                )
-            })
-        )
+                })
+            )
+        }
     }
     
     private static func slaBerichtenOp(_ completionHandler: @escaping Handler<Bool>) -> ResponseHandler {
@@ -119,11 +156,13 @@ class PrikbordService {
                     let request = NSFetchRequest<BerichtMO>(entityName: "Bericht")
                     request.sortDescriptors = [NSSortDescriptor(key: "volgnummer", ascending: false)]
                     let nieuwsteBericht = try managedObjectContext.fetch(request)
+                    
+                    let vergelijkbericht = nieuwsteBericht.first(where: {$0.auteur != "demo"});
                 
                     var berichten = [BerichtMO]()
                     for element in elements {
                         let bericht = mapToBerichtMO(element: element, into: managedObjectContext)
-                        if (!nieuwsteBericht.isEmpty && (equal(bericht1: bericht, bericht2: nieuwsteBericht.first!))) {
+                        if (vergelijkbericht != nil && (equal(bericht1: bericht, bericht2: vergelijkbericht!))) {
                             managedObjectContext.delete(bericht)
                             break
                         }
