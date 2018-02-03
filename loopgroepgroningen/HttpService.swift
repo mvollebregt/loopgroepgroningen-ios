@@ -93,6 +93,10 @@ class HttpService {
             }
             
             let formElement = elements.first!
+            var actionUrl = formElement.attributes["action"] as! String;
+            if (!actionUrl.contains("loopgroepgroningen.nl")) {
+                actionUrl = "http://www.loopgroepgroningen.nl" + actionUrl;
+            }
             let inputs = formElement.search(withXPathQuery: "//input") as! [TFHppleElement]
             
             var formData : [String: String] = [:]
@@ -108,7 +112,7 @@ class HttpService {
                 formData[param.0] = param.1
             }
             
-            post(url: url, params: formData, completionHandler);
+            post(url: actionUrl, params: formData, completionHandler);
 
         })
             
